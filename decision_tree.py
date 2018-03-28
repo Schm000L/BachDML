@@ -7,13 +7,7 @@ from __future__ import print_function
 # Format: each row is an example.
 # The last column is the label.
 # The first two columns are features.
-training_data = [
-        ['Green', 3, 'grapf', 'Apple'],
-        ['Yellow', 3, 'apf', 'Apple'],
-        ['Red', 1, 'grapf', 'Grape'],
-        ['Red', 1, 'grapf','Grape'],
-        ['Yellow', 3, 'lepf', 'Lemon']
-    ]
+training_data = []
 
 # Finds the unique values for a column in a dataset.
 def unique_vals(rows, col):
@@ -273,7 +267,6 @@ def classify(row, node):
     else:
         return classify(row, node.false_branch)
 
-
 #######
 # Demo:
 # The tree predicts the 1st row of our
@@ -302,7 +295,19 @@ def print_leaf(counts):
 # print_leaf(classify(training_data[1], my_tree))
 #######
 
+def test(decision_tree, rows):
+    for row in rows:
+        print ("Actual: %s. Predicted: %s" % (row[-1], print_leaf(classify(row, decision_tree))))
+
 if __name__ == '__main__':
+
+    training_data = [
+        ['Green', 3, 'grapf', 'Apple'],
+        ['Yellow', 3, 'apf', 'Apple'],
+        ['Red', 1, 'grapf', 'Grape'],
+        ['Red', 1, 'grapf','Grape'],
+        ['Yellow', 3, 'lepf', 'Lemon']
+    ]
 
     my_tree = build_tree(training_data)
 

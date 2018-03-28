@@ -1,9 +1,5 @@
 import decision_tree
 
-def test(dt, rows):
-    for row in rows:
-        print ("Actual: %s. Predicted: %s" % (row[-1], decision_tree.print_leaf(decision_tree.classify(row, dt))))
-
 training_data_1 = [
     ['Green', 3, 'grapf', 'Apple'],
     ['Yellow', 3, 'apf', 'Apple'],
@@ -33,9 +29,9 @@ testing_data = [
 
 print("tree_1: ")
 decision_tree.print_tree(tree_1)
-test(tree_1, testing_data)
+decision_tree.test(tree_1, testing_data)
 print("")
 
 print("Testing tree_2:")
 decision_tree.print_tree(tree_2)
-test(tree_2, testing_data)
+decision_tree.test(tree_2, testing_data)
