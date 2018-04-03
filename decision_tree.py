@@ -1,4 +1,5 @@
 # Modified version of random-forests's orginal which can be found at: https://github.com/random-forests/tutorials/blob/master/decision_tree.py
+# Tutorial at https://www.youtube.com/watch?v=LDRbO9a6XPU
 
 # For Python 2 / 3 compatability
 from __future__ import print_function
@@ -267,14 +268,6 @@ def classify(row, node):
     else:
         return classify(row, node.false_branch)
 
-#######
-# Demo:
-# The tree predicts the 1st row of our
-# training data is an apple with confidence 1.
-# my_tree = build_tree(training_data)
-# classify(training_data[0], my_tree)
-#######
-
 def print_leaf(counts):
     """A nicer way to print the predictions at a leaf."""
     total = sum(counts.values()) * 1.0
@@ -282,18 +275,6 @@ def print_leaf(counts):
     for lbl in counts.keys():
         probs[lbl] = str(int(counts[lbl] / total * 100)) + "%"
     return probs
-
-#######
-# Demo:
-# Printing that a bit nicer
-# print_leaf(classify(training_data[0], my_tree))
-#######
-
-#######
-# Demo:
-# On the second example, the confidence is lower
-# print_leaf(classify(training_data[1], my_tree))
-#######
 
 def test(decision_tree, rows):
     for row in rows:
