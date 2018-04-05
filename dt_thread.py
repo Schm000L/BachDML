@@ -2,6 +2,7 @@
 import threading
 from dt import Decision_Tree
 
+#Creating new worker thread
 class TreeThread(threading.Thread):
 
     def __init__(self, threadID, training_data):

@@ -1,3 +1,4 @@
+import data_sort
 from dt_thread import TreeThread
 from random import randint
 import time
@@ -23,28 +24,30 @@ test_data = [
 ]
 
 
-def extract_training_data(training_data):
+def extract_training_data(dataSet):
     data = []
-    for n in range(0, 6):
-        data.append(training_data[randint(0, len(training_data)-1)])
+    for n in range(0, int(round(0.6*len(dataSet)))):
+        data.append(dataSet[randint(0, len(dataSet)-1)])
     return data
 
 # Create threads
 threads = []
-for i in range(0, 5):
-    threads.append(TreeThread(str(i), extract_training_data(training_data)))
+for i in range(0, 11):
+    threads.append(TreeThread(str(i), extract_training_data(data_sort.makeSet("abalone_train.txt", 9))))
 
 # Start threads
 for i in range(0, len(threads)):
     print(threads[i].threadID + " started")
     threads[i].start()
 
+test_data_abalone = data_sort.makeSet("abalone_test.txt", 9)
+
 # Test on testing_data
-for i in range(0, len(test_data)):
+for i in range(0, len(test_data_abalone)):
     classed = {}
     prediction = []   
     for j in range(0, len(threads)):
-        prediction.append(threads[j].query(test_data[i]))
+        prediction.append(threads[j].query(test_data_abalone[i]))
     
     while len(prediction) < len(threads):
         sleep(1) 
