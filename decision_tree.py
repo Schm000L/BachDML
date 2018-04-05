@@ -1,4 +1,5 @@
 # Modified version of random-forests's orginal which can be found at: https://github.com/random-forests/tutorials/blob/master/decision_tree.py
+# Tutorial at https://www.youtube.com/watch?v=LDRbO9a6XPU
 
 # For Python 2 / 3 compatability
 from __future__ import print_function
@@ -40,10 +41,8 @@ class Question:
     def match(self, example):
         val = example[self.column]
         if is_numeric(val):
-            # print(val, 'self.value ', self.value)
             return val >= self.value
         else:
-            # print("non numeric ", self.value)
             return val == self.value
 
     # Helper method to print the question in a readable format.
@@ -269,14 +268,6 @@ def classify(row, node):
     else:
         return classify(row, node.false_branch)
 
-#######
-# Demo:
-# The tree predicts the 1st row of our
-# training data is an apple with confidence 1.
-# my_tree = build_tree(training_data)
-# classify(training_data[0], my_tree)
-#######
-
 def print_leaf(counts):
     """A nicer way to print the predictions at a leaf."""
     total = sum(counts.values()) * 1.0
@@ -285,36 +276,9 @@ def print_leaf(counts):
         probs[lbl] = str(int(counts[lbl] / total * 100)) + "%"
     return probs
 
-#######
-# Demo:
-# Printing that a bit nicer
-# print_leaf(classify(training_data[0], my_tree))
-#######
-
-#######
-# Demo:
-# On the second example, the confidence is lower
-# print_leaf(classify(training_data[1], my_tree))
-#######
-answers = [0,0]
-
 def test(decision_tree, rows):
     for row in rows:
-        temp = print_leaf(classify(row, decision_tree))
-
-        print ("Actual: %s. Predicted: %s" % (row[-1], temp))
-        set = []
-        set.append(row[-1])
-        if "M" in str(temp):
-            set.append("F")
-        elif "F" in str(temp):
-            set.append("F")
-        else: set.append("I")
-
-        if set[0] == set[1]:
-            answers[0] += 1
-        answers[1] += 1
-        print(answers[0]/answers[1])
+        print ("Actual: %s. Predicted: %s" % (row[-1], print_leaf(classify(row, decision_tree))))
 
 if __name__ == '__main__':
 

@@ -36,29 +36,29 @@ thread2.start()
 print("Exiting Main Thread")
 
 training_data_1 = [
-    ['Green', 3, 'grapf', 'Apple'],
-    ['Yellow', 3, 'apf', 'Apple'],
-    ['Red', 1, 'grapf', 'Grape'],
-    ['Red', 1, 'grapf','Grape'],
-    ['Yellow', 3, 'lepf', 'Lemon']
+    ['Green', 3, 'Apple'],
+    ['Red', 3, 'Apple'],
+    ['Red', 1, 'Grape'],
+    ['Red', 1,'Grape'],
+    ['Yellow', 3, 'Lemon']
 ]
 
 training_data_2 =  [
-    ['Yellow', 3, 'grapf', 'Apple'],
-    ['Red', 1, 'grapf', 'Grape'],
-    ['Red', 1, 'grapf','Grape'],
-    ['Yellow', 3, 'grapf', 'Lemon']
+    ['Yellow', 3, 'Apple'],
+    ['Red', 1, 'Grape'],
+    ['Red', 1, 'Grape'],
+    ['Yellow', 3,'Lemon']
 ]
 
 
 
 # Evaluation data
 testing_data = [
-    ['Green', 3, 'apf', 'Apple'],
-    ['Yellow', 4, 'grapf', 'Apple'],
-    ['Red', 2, 'grapf', 'Grape'],
-    ['Red', 1, 'apf','Grape'],
-    ['Yellow', 3, 'lepf', 'Lemon'],
+    ['Green', 3, 'Apple'],
+    ['Yellow', 4, 'Apple'],
+    ['Red', 2, 'Grape'],
+    ['Red', 1, 'Grape'],
+    ['Yellow', 3, 'Lemon'],
 ]
 
 
