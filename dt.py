@@ -244,8 +244,10 @@ class Decision_Tree:
     # def print_tree(self, *args)
     #     print(len(args))
     #     print_tree(self.tree)
+    def print_tree(self):
+        self.print_nodes(self.tree)
 
-    def print_tree(self, node, spacing=""):
+    def print_nodes(self, node, spacing=""):
         """World's most elegant tree printing function."""
 
         # Base case: we've reached a leaf
@@ -258,11 +260,11 @@ class Decision_Tree:
 
         # Call this function recursively on the true branch
         print (spacing + '--> True:')
-        self.print_tree(node.true_branch, spacing + "  ")
+        self.print_nodes(node.true_branch, spacing + "  ")
 
         # Call this function recursively on the false branch
         print (spacing + '--> False:')
-        self.print_tree(node.false_branch, spacing + "  ")
+        self.print_nodes(node.false_branch, spacing + "  ")
 
 
     def classify(self, row, node):
@@ -292,6 +294,9 @@ class Decision_Tree:
         for row in rows:
             print ("Actual: %s. Predicted: %s" % (row[-1], self.print_leaf(self.classify(row, decision_tree))))
 
+    def predict(self, decision_tree, row):
+            return self.print_leaf(self.classify(row, decision_tree))
+
 if __name__ == '__main__':
 
     training_data = [
@@ -304,7 +309,7 @@ if __name__ == '__main__':
 
     my_tree = Decision_Tree(training_data)
 
-    my_tree.print_tree(my_tree.tree)
+    my_tree.print_tree()
 
     # Evaluate
     testing_data = [
