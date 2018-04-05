@@ -40,8 +40,10 @@ class Question:
     def match(self, example):
         val = example[self.column]
         if is_numeric(val):
+            # print(val, 'self.value ', self.value)
             return val >= self.value
         else:
+            # print("non numeric ", self.value)
             return val == self.value
 
     # Helper method to print the question in a readable format.
@@ -294,10 +296,25 @@ def print_leaf(counts):
 # On the second example, the confidence is lower
 # print_leaf(classify(training_data[1], my_tree))
 #######
+answers = [0,0]
 
 def test(decision_tree, rows):
     for row in rows:
-        print ("Actual: %s. Predicted: %s" % (row[-1], print_leaf(classify(row, decision_tree))))
+        temp = print_leaf(classify(row, decision_tree))
+
+        print ("Actual: %s. Predicted: %s" % (row[-1], temp))
+        set = []
+        set.append(row[-1])
+        if "M" in str(temp):
+            set.append("F")
+        elif "F" in str(temp):
+            set.append("F")
+        else: set.append("I")
+
+        if set[0] == set[1]:
+            answers[0] += 1
+        answers[1] += 1
+        print(answers[0]/answers[1])
 
 if __name__ == '__main__':
 
