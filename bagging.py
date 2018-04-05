@@ -33,14 +33,14 @@ def extract_training_data(dataSet):
 # Create threads
 threads = []
 for i in range(0, 11):
-    threads.append(TreeThread(str(i), extract_training_data(data_sort.makeSet("abalone_train.txt", 9))))
+    threads.append(TreeThread(str(i), extract_training_data(data_sort.makeSet("adult_data.txt", 15))))
 
 # Start threads
 for i in range(0, len(threads)):
     print(threads[i].threadID + " started")
     threads[i].start()
 
-test_data_abalone = data_sort.makeSet("abalone_test.txt", 9)
+test_data_abalone = data_sort.makeSet("adult_data_test.txt", 15)
 
 # Test on testing_data
 for i in range(0, len(test_data_abalone)):
@@ -57,4 +57,5 @@ for i in range(0, len(test_data_abalone)):
         if label not in classed:
             classed[label] = 0
         classed[label] += 1
+    print(str(test_data_abalone[i]))
     print(classed)

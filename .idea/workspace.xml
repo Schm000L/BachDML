@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="69ad1592-5d0b-4e0a-95af-58b33d8ca4a5" name="Default" comment="Karol Update">
+    <list default="true" id="69ad1592-5d0b-4e0a-95af-58b33d8ca4a5" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/adult_data.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/adult_data_test.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bagging.py" afterPath="$PROJECT_DIR$/bagging.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data_sort.py" afterPath="$PROJECT_DIR$/data_sort.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dt_thread.py" afterPath="$PROJECT_DIR$/dt_thread.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,7 +20,7 @@
     <SUITE FILE_PATH="coverage/BachDistML$dt_runner.coverage" NAME="dt_runner Coverage Results" MODIFIED="1522766410926" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BachDistML$zillow.coverage" NAME="zillow Coverage Results" MODIFIED="1522756383370" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BachDistML$my_decision_tree.coverage" NAME="my_decision_tree Coverage Results" MODIFIED="1522769779509" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/BachDistML$bagging.coverage" NAME="bagging Coverage Results" MODIFIED="1522939188469" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/BachDistML$bagging.coverage" NAME="bagging Coverage Results" MODIFIED="1522940255485" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -39,7 +40,7 @@
       <file leaf-file-name="decision_tree.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/decision_tree.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
+            <state relative-caret-position="386">
               <caret line="281" column="0" lean-forward="false" selection-start-line="281" selection-start-column="0" selection-end-line="281" selection-end-column="0" />
               <folding />
             </state>
@@ -51,16 +52,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="447">
               <caret line="176" column="4" lean-forward="false" selection-start-line="176" selection-start-column="4" selection-end-line="176" selection-end-column="4" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="abalone_test.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/abalone_test.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2">
-              <caret line="19" column="56" lean-forward="false" selection-start-line="19" selection-start-column="56" selection-end-line="19" selection-end-column="56" />
               <folding />
             </state>
           </provider>
@@ -91,8 +82,8 @@
       <file leaf-file-name="bagging.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bagging.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="34" column="20" lean-forward="false" selection-start-line="34" selection-start-column="20" selection-end-line="34" selection-end-column="20" />
+            <state relative-caret-position="207">
+              <caret line="59" column="36" lean-forward="false" selection-start-line="59" selection-start-column="36" selection-end-line="59" selection-end-column="36" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -100,21 +91,41 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dt_thread.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dt_thread.py">
+      <file leaf-file-name="adult_data.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/adult_data.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="16">
-              <caret line="4" column="27" lean-forward="false" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
+            <state relative-caret-position="9048">
+              <caret line="522" column="128" lean-forward="false" selection-start-line="522" selection-start-column="128" selection-end-line="522" selection-end-column="128" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dt.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dt.py">
+      <file leaf-file-name="adult_data_test.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/adult_data_test.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4010">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="630">
+              <caret line="35" column="133" lean-forward="false" selection-start-line="35" selection-start-column="133" selection-end-line="35" selection-end-column="133" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="733">
+              <caret line="102" column="5" lean-forward="false" selection-start-line="102" selection-start-column="5" selection-end-line="102" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dt_thread.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dt_thread.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-284">
+              <caret line="4" column="27" lean-forward="false" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -180,6 +191,9 @@
         <option value="$PROJECT_DIR$/dt_runner.py" />
         <option value="$PROJECT_DIR$/dt_thread.py" />
         <option value="$PROJECT_DIR$/data_sort.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/adult_data.txt" />
+        <option value="$PROJECT_DIR$/adult_data_test.txt" />
         <option value="$PROJECT_DIR$/bagging.py" />
       </list>
     </option>
@@ -633,7 +647,14 @@
       <option name="project" value="LOCAL" />
       <updated>1522922444095</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Karol Update">
+      <created>1522939604491</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1522939604491</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView">
@@ -678,7 +699,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Training datasets" />
-    <option name="LAST_COMMIT_MESSAGE" value="Training datasets" />
+    <MESSAGE value="Karol Update" />
+    <option name="LAST_COMMIT_MESSAGE" value="Karol Update" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -903,26 +925,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/decision_tree.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="281" column="0" lean-forward="false" selection-start-line="281" selection-start-column="0" selection-end-line="281" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data_sort.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="431">
           <caret line="41" column="10" lean-forward="true" selection-start-line="41" selection-start-column="10" selection-end-line="41" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dt_thread.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16">
-          <caret line="4" column="27" lean-forward="false" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
           <folding />
         </state>
       </provider>
@@ -935,10 +941,50 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="733">
+          <caret line="102" column="5" lean-forward="false" selection-start-line="102" selection-start-column="5" selection-end-line="102" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dt_thread.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-284">
+          <caret line="4" column="27" lean-forward="false" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adult_data_test.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="35" column="133" lean-forward="false" selection-start-line="35" selection-start-column="133" selection-end-line="35" selection-end-column="133" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adult_data.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9048">
+          <caret line="522" column="128" lean-forward="false" selection-start-line="522" selection-start-column="128" selection-end-line="522" selection-end-column="128" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/decision_tree.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="386">
+          <caret line="281" column="0" lean-forward="false" selection-start-line="281" selection-start-column="0" selection-end-line="281" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/bagging.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="34" column="20" lean-forward="false" selection-start-line="34" selection-start-column="20" selection-end-line="34" selection-end-column="20" />
+        <state relative-caret-position="207">
+          <caret line="59" column="36" lean-forward="false" selection-start-line="59" selection-start-column="36" selection-end-line="59" selection-end-column="36" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>
