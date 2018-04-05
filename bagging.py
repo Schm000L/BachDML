@@ -57,5 +57,5 @@ for i in range(0, len(test_data_abalone)):
         if label not in classed:
             classed[label] = 0
         classed[label] += 1
-    print(str(test_data_abalone[i]))
+    print(str(test_data_abalone[i][14]))
     print(classed)
