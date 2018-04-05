@@ -1,5 +1,6 @@
 from dt_thread import TreeThread
 from random import randint
+import time
 
 training_data = [
     ['Green', 3, 'Apple'],
@@ -28,33 +29,29 @@ def extract_training_data(training_data):
         data.append(training_data[randint(0, len(training_data)-1)])
     return data
 
+# Create threads
 threads = []
-thread1 = TreeThread("1", extract_training_data(training_data))
-thread2 = TreeThread("2", extract_training_data(training_data))
-
-threads.append(thread1)
-threads.append(thread2)
+for i in range(0, 5):
+    threads.append(TreeThread(str(i), extract_training_data(training_data)))
 
 # Start threads
 for i in range(0, len(threads)):
     print(threads[i].threadID + " started")
     threads[i].start()
 
+# Test on testing_data
 for i in range(0, len(test_data)):
-    classed = {}   
+    classed = {}
+    prediction = []   
     for j in range(0, len(threads)):
-        # temp = []
-        # temp.append(test_data[i])
-        # threads[j].query(temp)
-        predicted = threads[j].query(test_data[i])
+        prediction.append(threads[j].query(test_data[i]))
+    
+    while len(prediction) < len(threads):
+        sleep(1) 
+    
+    for predicted in prediction:
         label = max(predicted, key=lambda key: predicted[key])
         if label not in classed:
             classed[label] = 0
         classed[label] += 1
     print(classed)
-    
-#thread1.start()
-#thread2.start()
-
-#thread1.query(test_data)
-#thread2.query(test_data)
