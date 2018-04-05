@@ -294,6 +294,9 @@ class Decision_Tree:
         for row in rows:
             print ("Actual: %s. Predicted: %s" % (row[-1], self.print_leaf(self.classify(row, decision_tree))))
 
+    def predict(self, decision_tree, row):
+            return self.print_leaf(self.classify(row, decision_tree))
+
 if __name__ == '__main__':
 
     training_data = [

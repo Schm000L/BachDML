@@ -16,7 +16,7 @@ class TreeThread(threading.Thread):
 
     def query(self, query_data):
         print(self.threadID + " queried")
-        self.decision_tree.test(self.decision_tree.tree, query_data)
+        return self.decision_tree.predict(self.decision_tree.tree, query_data)
 
     def print_tree(self):
         self.decision_tree.print_tree() 
