@@ -1,14 +1,21 @@
 #import _thread
 import threading
 from dt import Decision_Tree
+import data_sort
+from random import randint
 
 #Creating new worker thread
 class TreeThread(threading.Thread):
 
-    def __init__(self, threadID, training_data):
+    def __init__(self, threadID,  dataSet):
+    # def __init__(self, threadID,  stringToFile, nbrOfFeatures):
+        # print("init")
         threading.Thread.__init__(self)
+        self.start()
         self.threadID = threadID
-        self.decision_tree = Decision_Tree(training_data)
+        self.decision_tree = Decision_Tree(dataSet)
+        # data = self.extract_training_data(data_sort.makeSet(stringToFile, nbrOfFeatures))
+        # self.decision_tree = Decision_Tree(data)
     # def __init__def __init__(self, group=None, target=None, name=None, args=(), kwargs=None, verbose=None):
     #     threading.Thread.__init__(self, group=group, target=target, name=name,verbose=verbose)
     #     self.args = args
@@ -16,11 +23,17 @@ class TreeThread(threading.Thread):
     #     return
 
     def query(self, query_data):
-        print(self.threadID + " queried")
+        # print(self.threadID + " queried")
         return self.decision_tree.predict(self.decision_tree.tree, query_data)
 
     def print_tree(self):
-        self.decision_tree.print_tree() 
+        self.decision_tree.print_tree()
+
+    def extract_training_data(self, dataSet):
+        data = []
+        for n in range(0, int(round(0.6 * len(dataSet)))):
+            data.append(dataSet[randint(0, len(dataSet) - 1)])
+        return data
 
 
 if __name__ == "__main__":

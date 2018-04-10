@@ -12,7 +12,7 @@ def isint(value):
   except:
     return False
 
-def makeSet(file, lenth):
+def makeSet(file, length):
     l1=[]
     for line in open(file, 'r').readlines():
         set = []
@@ -34,7 +34,7 @@ def makeSet(file, lenth):
                 elif word is ' ':
                     continue
                 set.append(word)
-        if len(set) == lenth:
+        if len(set) == length:
             l1.append(set)
         else: continue
     return l1
