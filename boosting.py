@@ -41,6 +41,9 @@ def extract_training_data(dataSet):
 # Create threads
 threads = []
 for i in range(0, number_of_workers):
+    # 1. Train thread
+    # 2. Evaluate and weight training_data
+
     threads.append(TreeThread(str(i), extract_training_data(training_data)))
     # threads.append(TreeThread(str(i), "abalone_train.txt", number_of_features))
 
