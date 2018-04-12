@@ -26,7 +26,7 @@ test_data = [
     ['Green', 4, 'Apple']
 ]
 
-number_of_workers = 10
+number_of_workers = 20
 data_for_workers = []
 number_of_features = 15
 training_data = data_sort.makeSet("adult_data.txt", number_of_features)
@@ -36,6 +36,23 @@ def extract_training_data(dataSet):
     data = []
     for n in range(0, int(round(0.6*len(dataSet)))):
         data.append(dataSet[randint(0, len(dataSet)-1)])
+    return data
+
+def hard_extraction(dataSet, number_of_workers, worker_number, overlap):
+    data = []
+    start_position = (worker_number - 1 / number_of_workers) * len(dataSet) 
+    end_position = start_position + len(dataSet)/number_of_workers + overlap
+    
+    if end_position > len(dataSet):
+        new_end = end_position - len(dataSet)
+        for i in range(start_position, len(dataSet)):
+            data.append(dataSet[i])
+        for i in range(0, new_end):
+            data.append(dataSet[i])
+    else:
+        for i in range(start_position, end_position):
+            data.append(dataSet[i])
+    
     return data
 
 # Create threads
