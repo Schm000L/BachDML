@@ -297,6 +297,23 @@ class Decision_Tree:
     def predict(self, decision_tree, row):
             return self.print_leaf(self.classify(row, decision_tree))
 
+    def binary_prediction(self, decision_tree, row):
+        
+        counts = self.classify(row, decision_tree)
+        if -1 not in counts:
+            return 1
+        if 1 not in counts:
+            return -1
+
+        if counts[-1] > counts[1]:
+            return -1
+        elif counts[-1] > counts[1]:
+            return 1
+        else:
+            print("ERROR")
+            return            
+
+
 if __name__ == '__main__':
 
     training_data = [

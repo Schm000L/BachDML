@@ -26,6 +26,10 @@ class TreeThread(threading.Thread):
         # print(self.threadID + " queried")
         return self.decision_tree.predict(self.decision_tree.tree, query_data)
 
+    def binary_query(self, query_data):
+        # print(self.threadID + " queried")
+        return self.decision_tree.binary_prediction(self.decision_tree.tree, query_data)
+
     def print_tree(self):
         self.decision_tree.print_tree()
 

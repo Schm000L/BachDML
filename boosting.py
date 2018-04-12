@@ -2,7 +2,6 @@ import data_sort
 from dt_thread import TreeThread
 # from dt import Decision_Tree
 from random import randint
-from datetime import datetime
 import time
 
 startTime = time.time()
@@ -30,6 +29,10 @@ number_of_workers = 10
 data_for_workers = []
 number_of_features = 15
 training_data = data_sort.makeSet("adult_data.txt", number_of_features)
+weights = []
+
+for i in range(0, len(training_data)):
+    weights.append(1)
 
 # TODO: Ta hänsyn till weights
 def extract_training_data(dataSet):
