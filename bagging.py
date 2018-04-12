@@ -2,8 +2,8 @@ import data_sort
 from dt_thread import TreeThread
 # from dt import Decision_Tree
 from random import randint
-from datetime import datetime
 import time
+import math
 
 startTime = time.time()
 training_data = [
@@ -40,8 +40,8 @@ def extract_training_data(dataSet):
 
 def hard_extraction(dataSet, number_of_workers, worker_number, overlap):
     data = []
-    start_position = (worker_number - 1 / number_of_workers) * len(dataSet) 
-    end_position = start_position + len(dataSet)/number_of_workers + overlap
+    start_position = math.floor(((worker_number - 1) / number_of_workers) * len(dataSet))
+    end_position = math.ceil(start_position + len(dataSet)/number_of_workers + overlap)
     
     if end_position > len(dataSet):
         new_end = end_position - len(dataSet)
@@ -58,7 +58,8 @@ def hard_extraction(dataSet, number_of_workers, worker_number, overlap):
 # Create threads
 threads = []
 for i in range(0, number_of_workers):
-    threads.append(TreeThread(str(i), extract_training_data(training_data)))
+    # threads.append(TreeThread(str(i), extract_training_data(training_data)))
+    threads.append(TreeThread(str(i), hard_extraction(training_data, number_of_workers, i, 10)))
     # threads.append(TreeThread(str(i), "abalone_train.txt", number_of_features))
 
 # # Start threads
@@ -66,17 +67,17 @@ for i in range(0, number_of_workers):
 #     # print(threads[i].threadID + " started")
 #     threads[i].start()
 
-test_data_abalone = data_sort.makeSet("adult_data_test.txt", number_of_features)
+test_data = data_sort.makeSet("adult_data_test.txt", number_of_features)
 
 accuracy = 0
 correct_prediction = 0
 
 # Test on testing_data
-for i in range(0, len(test_data_abalone)):
+for i in range(0, len(test_data)):
     classed = {}
     prediction = []
     for j in range(0, len(threads)):
-        prediction.append(threads[j].query(test_data_abalone[i]))
+        prediction.append(threads[j].query(test_data[i]))
     
     while len(prediction) < len(threads):
         sleep(1) 
@@ -86,7 +87,7 @@ for i in range(0, len(test_data_abalone)):
         if label not in classed:
             classed[label] = 0
         classed[label] += 1
-    correct_lable = str(test_data_abalone[i][number_of_features-1])
+    correct_lable = str(test_data[i][number_of_features-1])
     print(correct_lable)
     # print(len(classed.values()))
     # print(max(classed.values()))
@@ -94,7 +95,7 @@ for i in range(0, len(test_data_abalone)):
     print(predicted_lable, max(classed.values()))
     if predicted_lable in correct_lable:
         correct_prediction += 1
-accuracy = correct_prediction/len(test_data_abalone)
+accuracy = correct_prediction/len(test_data)
 print("accuracy", str(accuracy))
 
 print("Execution time (s): ", time.time() - startTime)
@@ -104,12 +105,12 @@ print("Execution time (s): ", time.time() - startTime)
 # strong_learner = Decision_Tree(training_data)
 
 # successful_prediction = 0
-# for i in range(0, len(test_data_abalone)):
-#     correct_lable = str(test_data_abalone[i][number_of_features-1])
+# for i in range(0, len(test_data)):
+#     correct_lable = str(test_data[i][number_of_features-1])
 #     # print("Corr:",correct_lable)
-#     # print("Predicted:", list(strong_learner.predict(strong_learner.tree, test_data_abalone[i]).keys())[0])
-#     if list(strong_learner.predict(strong_learner.tree, test_data_abalone[i]).keys())[0] == correct_lable:
+#     # print("Predicted:", list(strong_learner.predict(strong_learner.tree, test_data[i]).keys())[0])
+#     if list(strong_learner.predict(strong_learner.tree, test_data[i]).keys())[0] == correct_lable:
 #         successful_prediction += 1
-# acc = successful_prediction/(len(test_data_abalone))
+# acc = successful_prediction/(len(test_data))
 # print("Accuracy of strong learner", str(acc))
     
