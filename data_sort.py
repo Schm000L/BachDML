@@ -39,4 +39,26 @@ def makeSet(file, length):
         else: continue
     return l1
 
+def binaryfy(rows):
+    label_count = 0
+    labels = []
+    for row in rows:
+        label = row[-1]
+        if label in labels:
+            if label == labels[0]:
+                row[-1] = -1
+            elif label == labels[1]:
+                row[-1] = 1
+        elif len(labels) == 0:
+            labels.append(label)
+            row[-1] = -1
+        elif len(labels) == 1:
+            labels.append(label)
+            row[-1] = 1
+        else:
+            print("Something went wrong")
+            print("Labels:", labels)
+            print(row[-1])
+    return rows, labels
+
 # print(makeSet("abalone_train.txt", 9))
