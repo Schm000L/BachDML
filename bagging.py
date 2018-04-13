@@ -26,10 +26,10 @@ test_data = [
     ['Green', 4, 'Apple']
 ]
 
-number_of_workers = 20
+number_of_workers = 2
 data_for_workers = []
 number_of_features = 15
-training_data = data_sort.makeSet("adult_data.txt", number_of_features)
+training_data = data_sort.makeSet("adult_data_big.txt", number_of_features)
 
 # TODO: Ta hänsyn till weights
 def extract_training_data(dataSet):
@@ -71,6 +71,13 @@ test_data = data_sort.makeSet("adult_data_test.txt", number_of_features)
 
 accuracy = 0
 correct_prediction = 0
+TPover50 = 0
+FPover50 = 0
+FNover50 = 0
+TPunder50 = 0
+FNunder50 = 0
+FPunder50 = 0
+
 
 # Test on testing_data
 for i in range(0, len(test_data)):
@@ -93,11 +100,33 @@ for i in range(0, len(test_data)):
     # print(max(classed.values()))
     predicted_lable = list(classed.keys())[list(classed.values()).index(max(classed.values()))]
     print(predicted_lable, max(classed.values()))
+
     if predicted_lable in correct_lable:
         correct_prediction += 1
-accuracy = correct_prediction/len(test_data)
-print("accuracy", str(accuracy))
+        if ">50K" in predicted_lable:
+            TPover50 += 1
+        else:
+            TPunder50 += 1
+    else:
+        if ">50K" in predicted_lable:
+            FPover50 +=1
+            FNunder50 +=1
+        else:
+            FNover50 += 1
+            FPunder50 += 1
 
+
+precission_over_50 = TPover50 / (TPover50 + FPover50)
+recall_over_50 = TPover50 / (TPover50 + FNover50)
+precission_under_50 = TPunder50/(TPunder50 + FPunder50)
+recall_under_50 = TPunder50/(TPunder50+FNunder50)
+F1 = 2*((precission_over_50+precission_under_50)/2 * (recall_over_50+recall_under_50)/2) / ((precission_over_50+precission_under_50)/2 + (recall_over_50+recall_under_50)/2)
+accuracy = correct_prediction/len(test_data)
+
+print("Accuracy: ", str(accuracy))
+print("Precission: ", str(precission_over_50))
+print("Recall: ", str(recall_over_50))
+print("F1 score: ", str(F1))
 print("Execution time (s): ", time.time() - startTime)
 
 # Single strong learner
