@@ -1,72 +1,28 @@
 import data_sort
 from dt_thread import TreeThread
-# from dt import Decision_Tree
 from random import randint
 import math
 import time
-import numpy
-import operator
 
-# startTime = time.time()
-# training_data = [
-#     ['Green', 3, 'Apple'],
-#     ['Red', 3, 'Apple'],
-#     ['Red', 1, 'Grape'],
-#     ['Red', 2, 'Grape'],
-#     ['Yellow', 3, 'Apple'],
-#     ['Red', 1, 'Grape'],
-#     ['Red', 2, 'Grape'],
-#     ['Green', 1, 'Grape']
-# ]
+# NÅGOT ÄR GALET
 
-# test_data = [
-#     ['Green', 1, 'Grape'],
-#     ['Green', 2, 'Apple'],
-#     ['Green', 4, 'Apple']
-# ]
-
-# Kolla https://github.com/jaimeps/adaboost-implementation
-def binaryfy(rows):
-    label_count = 0
-    labels = []
-    for row in rows:
-        label = row[-1]
-        if label in labels:
-            if label == labels[0]:
-                row[-1] = -1
-            elif label == labels[1]:
-                row[-1] = 1
-        elif len(labels) == 0:
-            labels.append(label)
-            row[-1] = -1
-        elif len(labels) == 1:
-            labels.append(label)
-            row[-1] = 1
-        else:
-            print("Something went wrong")
-            print("Labels:", labels)
-            print(row[-1])
-    return rows, labels
-
-number_of_workers = 2
+startTime = time.time()
+number_of_workers = 10
 data_for_workers = []
 
 number_of_features = 15
 
-# Make training data on the form: feature feature ... lable (-1, 1)
-# Label contains the actual labels
 training_data = data_sort.makeSet("adult_data.txt", number_of_features)
-training_data, labels = binaryfy(training_data)
+training_data, labels = data_sort.binaryfy(training_data)
 
 alpha = []
+epsilon = 0.001
 start_weight = 1/len(training_data)
 weights = []
-print(start_weight)
+# print(start_weight)
 for n in range(0, len(training_data)):
     weights.append(start_weight)
 
-# print("START")
-# print(weights)
 # def loss_function(test_data):
 #     loss = 0
 #     for n in range(0, len(test_data)):
@@ -82,19 +38,25 @@ for n in range(0, len(training_data)):
 #     weight = old_weight * math.exp(row[-1]* alpha[worker_number]*threads[worker_number].binary_query(data_set[i])) / Z
 #     return weight
 
-def weighing(weights, error_rate, alpha, data_set,  predictions):
+
+def calculate_weights(weights, error_rate, alpha, data_set,  predictions):
     # TODO: Properly calculate Z, maybe add predicted[] instead of querying
     temp_weights = weights.copy()
-    Z = error_rate*math.exp(alpha) + (1-error_rate)*math.exp(-alpha)
+    ret = []
+    # Z = error_rate*math.exp(alpha) + (1-error_rate)*math.exp(-alpha)
+    Z = 2*math.sqrt((error_rate+epsilon)*(1-(error_rate+epsilon)))
     for i in range(0, len(temp_weights)):
         # print("Old:", temp_weights[i])    
-        temp_weights[i] = temp_weights[i] * math.exp(data_set[i][-1] * alpha * predictions[i]) / Z
+        ret.append((temp_weights[i] * math.exp(-1*data_set[i][-1] * alpha * predictions[i])) / Z)
+        # print("Checking preds")
+        # print((math.exp(-1*alpha * data_set[i][-1] * predictions[i])))
+        
         # if temp_weights[i] < 0:
         #     print('Weighing error', temp_weights[i])
         #     print("Alpha", alpha, "Prediction", predictions[i], "Corr", data_set[i][-1])
         #     print("Exp", math.exp(data_set[i][-1] * alpha * predictions[i]))
-
-    return temp_weights
+    # print(ret)
+    return ret
 
 # TODO: Ta hänsyn till weights
 def extract_training_data(data_set):
@@ -105,27 +67,36 @@ def extract_training_data(data_set):
 
 def calculate_error_rate(worker_number, weights, data_set, predictions):
     error_rate = 0
+    num_errors = 0
     for i in range(0, len(data_set)):
         if data_set[i][-1] != predictions[i]:
             error_rate += weights[i]
+            num_errors += 1
             # print("Error detected:", "predicted", predictions[i], "was", data_set[i][-1])
             # print("Weight:", weights[i])
+    if error_rate == 0 and num_errors != 0:
+        print("Rounding error")
+    # if num_errors == 0:
+    #     print("Woah, we got all of them right!!!")
     return error_rate
 
 def calculate_alpha(worker_number, error_rate):
-    print("Error rate", error_rate)
-    return 1/2*math.log((1-error_rate)/error_rate)
+    # print("Error rate", error_rate)
+    return 1/2*math.log((1-error_rate+epsilon)/(error_rate+epsilon))
 
-
+# indxs = []
 def extract_weighted_data(data_set, weights):
+    # indx = []
     tmp_weights = weights.copy() # For scoping
     data = []
     for i in range(0, math.floor(0.6*len(data_set))):
         # index = tmp_weights.index(max(tmp_weights))
         # index, max_value = max(enumerate(tmp_weights), key=operator.itemgetter(1))
         index = tmp_weights.index(max(tmp_weights))
+        # indx.append(index)
         data.append(data_set[index])
         tmp_weights[index] = 0
+    # indxs.append(indx)
     return data
 
 def make_predictions(worker_number, data_set):
@@ -134,20 +105,39 @@ def make_predictions(worker_number, data_set):
         predictions.append(threads[worker_number].binary_query(data_set[n]))
     return predictions
 
-# Create threads
+# preds  = []
+# dats = []
+# wghts = []
+
+# Create threads, train and evaluate them
 threads = []
 for i in range(0, number_of_workers):
-    # 1. Train thread
-    # 2. Evaluate and weight training_data
+    # wghts.append(weights)
+    w_sum = 0
+    # for w in weights:
+    #     w_sum += w
+    # print("Sum of all weights", w_sum)
+    
     threads.append(TreeThread(str(i), extract_weighted_data(training_data, weights)))
-    predictions = make_predictions(i, training_data)    
+    # dats.append(extract_weighted_data(training_data, weights))
 
+    predictions = make_predictions(i, training_data)    
+    # preds.append(predictions)
+    
     error = calculate_error_rate(i, weights, training_data, predictions)
-    print("error:", error)
+    # print("error:", i, error)
     alpha.append(calculate_alpha(i, error))
-    weights = weighing(weights, error, alpha[i], training_data, predictions)
-    print("Alpha:", alpha[i])
-    # threads.append(TreeThread(str(i), "abalone_train.txt", number_of_features))
+    # print('Alpha', alpha[i])
+    weights = calculate_weights(weights, error, alpha[i], training_data, predictions)
+    # print("Alpha:", alpha[i])
+    # threads.append(TreeThread(str(i), "abalone_train.txt", number_of_features)
+
+# diff = 0
+# for m in range(0, number_of_workers):
+#     for n in range(0, number_of_workers):
+#         if dats[m] != dats[n]:
+#             diff += 1
+# print("diff", diff)
 
 # # Start threads
 # for i in range(0, len(threads)):
@@ -155,41 +145,46 @@ for i in range(0, number_of_workers):
 
 # def run_test(test_data, thread_number):
 
+test_data = data_sort.makeSet("adult_data_test.txt", number_of_features)
+test_data, labels = data_sort.binaryfy(test_data)
 
-# test_data = data_sort.makeSet("adult_data_test.txt", number_of_features)
-# test_data, labels = binaryfy(test_data)
+correct_prediction = 0
 
-# accuracy = 0
-# correct_prediction = 0
-
-# # Test on testing_data
-# for i in range(0, len(test_data)):
-#     classed = {}
-#     prediction = []
-#     for j in range(0, len(threads)):
-#         prediction.append(threads[j].query(test_data[i]))
+print("RUNNING TEST")
+# Test on test_data
+for i in range(0, len(test_data)):
+    prediction  = 0 
+    for j in range(0, len(threads)):
+        prediction += alpha[j] * threads[j].binary_query(test_data[i])
     
-#     while len(prediction) < len(threads):
-#         sleep(1) 
-    
-#     for predicted in prediction:
-#         label = max(predicted, key=lambda key: predicted[key])
-#         if label not in classed:
-#             classed[label] = 0
-#         classed[label] += 1
-#     correct_lable = test_data[i][number_of_features-1]
-#     print("Correct label:", correct_lable)
-#     # print(len(classed.values()))
-#     # print(max(classed.values()))
-#     predicted_lable = list(classed.keys())[list(classed.values()).index(max(classed.values()))]
-#     print("Predicted label", predicted_lable)
-#     print("-------------------------------------------------")
-#     if predicted_lable == correct_lable:
-#         correct_prediction += 1
-# accuracy = correct_prediction/len(test_data)
-# print("accuracy", str(accuracy))
+    # Make sure every thread has answered
+    time.sleep(0.05)
 
-# print("Execution time (s): ", time.time() - startTime)
+    # # Wait to ensure that every worker has answered
+    # while len(prediction) < len(threads):
+    #     time.sleep(1) 
+    
+
+    if prediction > 0:
+        prediction = 1
+    elif prediction <= 0:
+        prediction = -1
+
+    if prediction == test_data[i][-1]:
+        correct_prediction += 1
+    # else:
+    #     print("Oops predicted wrong")
+    #     if prediction == -1:
+    #         print("Predicted: ", labels[0])
+    #         print("on", test_data[i])
+    #     else:
+    #         print("Predicted: ", labels[1])
+    #         print("on", test_data[i])
+
+accuracy = correct_prediction/len(test_data)
+print("accuracy", str(accuracy))
+
+print("Execution time (s): ", time.time() - startTime)
 
 # Single strong learner
 # print("Compare to a single strong learning: ")
@@ -215,3 +210,7 @@ for i in range(0, number_of_workers):
 #         prediction = 1
 #     elif prediction <= 0:
 #         prediction = -1
+
+
+# Make training data on the form: feature feature ... lable (-1, 1)
+# Label contains the actual labels
