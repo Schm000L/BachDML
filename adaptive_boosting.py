@@ -4,10 +4,13 @@ from random import randint
 import math
 import time
 
-# NÅGOT ÄR GALET
+# FEL: Varv 1 funkar till synes felfritt
+# Varv 2 ger ERROR 3 gånger
+# Varv 2 kraschar sedan på calculate_weights
 
-startTime = time.time()
-number_of_workers = 15
+# Test on 1, 2, 5, 10, 20, 50, 100 and 200 workers (maybe 400 too later on)
+start_time = time.time()
+number_of_workers = 5
 data_for_workers = []
 
 number_of_features = 15
@@ -113,22 +116,24 @@ def make_predictions(worker_number, data_set):
 threads = []
 for i in range(0, number_of_workers):
     # wghts.append(weights)
+    print("Training", i+1, "at time", time.time()-start_time)
     w_sum = 0
     # for w in weights:
     #     w_sum += w
     # print("Sum of all weights", w_sum)
-    
     threads.append(TreeThread(str(i), extract_weighted_data(training_data, weights)))
     # dats.append(extract_weighted_data(training_data, weights))
-
+    print("Getting predictions")
     predictions = make_predictions(i, training_data)    
     # preds.append(predictions)
-    
+    print("Calculating error_rate")
     error = calculate_error_rate(i, weights, training_data, predictions)
     # print("error:", i, error)
+    print("Calculating alpha")
     alpha.append(calculate_alpha(i, error))
     # print('Alpha', alpha[i])
     if i != number_of_workers-1:
+        print("Calculating new weights")
         weights = calculate_weights(weights, error, alpha[i], training_data, predictions)
     # print("Alpha:", alpha[i])
     # threads.append(TreeThread(str(i), "abalone_train.txt", number_of_features)
@@ -182,7 +187,6 @@ for i in range(0, len(test_data)):
     elif prediction <= 0:
         prediction = -1
 
-
     if prediction == test_data[i][-1]:
         correct_prediction += 1
     
@@ -218,10 +222,10 @@ F1 = 2*((precission_plus+precission_minus)/2 * (recall_plus+recall_minus)/2) / (
 accuracy = correct_prediction/len(test_data)
 
 print("Accuracy: ", str(accuracy))
-print("Precission: ", str(precission_plus))
+print("Precision: ", str(precission_plus))
 print("Recall: ", str(recall_minus))
 print("F1 score: ", str(F1))
-print("Execution time (s): ", time.time() - startTime)
+print("Execution time (s): ", time.time() - start_time)
 
 # Single strong learner
 # print("Compare to a single strong learning: ")

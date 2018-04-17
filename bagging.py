@@ -5,7 +5,7 @@ from random import randint
 import time
 import math
 
-startTime = time.time()
+start_time = time.time()
 training_data = [
     ['Green', 3, 'Apple'],
     ['Red', 3, 'Apple'],
@@ -124,10 +124,10 @@ F1 = 2*((precission_over_50+precission_under_50)/2 * (recall_over_50+recall_unde
 accuracy = correct_prediction/len(test_data)
 
 print("Accuracy: ", str(accuracy))
-print("Precission: ", str(precission_over_50))
+print("Precision: ", str(precission_over_50))
 print("Recall: ", str(recall_over_50))
 print("F1 score: ", str(F1))
-print("Execution time (s): ", time.time() - startTime)
+print("Execution time (s): ", time.time() - start_time)
 
 # Single strong learner
 # print("Compare to a single strong learning: ")
