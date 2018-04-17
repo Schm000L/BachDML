@@ -7,7 +7,7 @@ import time
 # NÅGOT ÄR GALET
 
 startTime = time.time()
-number_of_workers = 2
+number_of_workers = 15
 data_for_workers = []
 
 number_of_features = 15
@@ -128,7 +128,8 @@ for i in range(0, number_of_workers):
     # print("error:", i, error)
     alpha.append(calculate_alpha(i, error))
     # print('Alpha', alpha[i])
-    weights = calculate_weights(weights, error, alpha[i], training_data, predictions)
+    if i != number_of_workers-1:
+        weights = calculate_weights(weights, error, alpha[i], training_data, predictions)
     # print("Alpha:", alpha[i])
     # threads.append(TreeThread(str(i), "abalone_train.txt", number_of_features)
 
@@ -169,7 +170,7 @@ for i in range(0, len(test_data)):
         prediction += alpha[j] * threads[j].binary_query(test_data[i])
     
     # Make sure every thread has answered
-    time.sleep(0.05)
+    # time.sleep(0.00005)
 
     # # Wait to ensure that every worker has answered
     # while len(prediction) < len(threads):
