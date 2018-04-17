@@ -7,7 +7,7 @@ import time
 # NÅGOT ÄR GALET
 
 startTime = time.time()
-number_of_workers = 10
+number_of_workers = 2
 data_for_workers = []
 
 number_of_features = 15
@@ -148,7 +148,18 @@ for i in range(0, number_of_workers):
 test_data = data_sort.makeSet("adult_data_test.txt", number_of_features)
 test_data, labels = data_sort.binaryfy(test_data)
 
+# correct_prediction = 0
+
+# false_negative_x == false_positive_y
+accuracy = 0
 correct_prediction = 0
+true_positive_minus = 0
+false_positive_minus = 0
+false_negative_minus = 0
+true_positive_plus = 0
+false_negative_plus = 0
+false_positive_plus = 0
+
 
 print("RUNNING TEST")
 # Test on test_data
@@ -164,14 +175,32 @@ for i in range(0, len(test_data)):
     # while len(prediction) < len(threads):
     #     time.sleep(1) 
     
-
+    # The sign of prediction decides the models final prediction
     if prediction > 0:
         prediction = 1
     elif prediction <= 0:
         prediction = -1
 
+
     if prediction == test_data[i][-1]:
         correct_prediction += 1
+    
+        if prediction == 1:
+            true_positive_plus += 1
+        else:
+            true_positive_minus += 1
+    
+    else:
+        # predicted 1, correct is -1
+        if prediction == 1:
+            false_positive_plus += 1
+            false_negative_minus += 1
+
+        # predicted -1, correct is 1
+        else:
+            false_positive_minus += 1
+            false_negative_plus += 1
+
     # else:
     #     print("Oops predicted wrong")
     #     if prediction == -1:
@@ -180,10 +209,17 @@ for i in range(0, len(test_data)):
     #     else:
     #         print("Predicted: ", labels[1])
     #         print("on", test_data[i])
-
+precission_plus = true_positive_plus / (true_positive_plus + false_positive_plus)
+recall_plus = true_positive_plus / (true_positive_plus + false_negative_plus)
+precission_minus = true_positive_minus/(true_positive_minus + false_positive_minus)
+recall_minus = true_positive_minus/(true_positive_minus+false_negative_minus)
+F1 = 2*((precission_plus+precission_minus)/2 * (recall_plus+recall_minus)/2) / ((precission_plus+precission_minus)/2 + (recall_plus+recall_minus)/2)
 accuracy = correct_prediction/len(test_data)
-print("accuracy", str(accuracy))
 
+print("Accuracy: ", str(accuracy))
+print("Precission: ", str(precission_plus))
+print("Recall: ", str(recall_minus))
+print("F1 score: ", str(F1))
 print("Execution time (s): ", time.time() - startTime)
 
 # Single strong learner
