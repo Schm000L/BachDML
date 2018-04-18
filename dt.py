@@ -249,7 +249,7 @@ class Decision_Tree:
         # TODO: Ena krockodimunnen är fel, för trött för att fixa nu
         if counts[-1] > counts[1]:
             return -1
-        elif counts[-1] > counts[1]:
+        elif counts[-1] <= counts[1]:
             return 1
         else:
             print("ERROR")

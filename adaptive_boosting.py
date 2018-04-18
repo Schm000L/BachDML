@@ -9,7 +9,7 @@ import time
 # Varv 2 kraschar sedan på calculate_weights
 
 start_time = time.time()
-number_of_workers = 3
+number_of_workers = 2
 data_for_workers = []
 
 number_of_features = 15
