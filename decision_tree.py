@@ -77,32 +77,6 @@ def gini(rows):
         impurity -= prob_of_lbl**2
     return impurity
 
-#######
-# Demo:
-# Let's look at some example to understand how Gini Impurity works.
-#
-# First, we'll look at a dataset with no mixing.
-# no_mixing = [['Apple'],
-#              ['Apple']]
-# this will return 0
-# gini(no_mixing)
-#
-# Now, we'll look at dataset with a 50:50 apples:oranges ratio
-# some_mixing = [['Apple'],
-#               ['Orange']]
-# this will return 0.5 - meaning, there's a 50% chance of misclassifying
-# a random example we draw from the dataset.
-# gini(some_mixing)
-#
-# Now, we'll look at a dataset with many different labels
-# lots_of_mixing = [['Apple'],
-#                  ['Orange'],
-#                  ['Grape'],
-#                  ['Grapefruit'],
-#                  ['Blueberry']]
-# This will return 0.8
-# gini(lots_of_mixing)
-#######
 
 def info_gain(left, right, current_uncertainty):
     """Information Gain.

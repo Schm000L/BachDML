@@ -5,8 +5,8 @@ import math
 import time
 
 # FEL: Varv 1 funkar till synes felfritt
-# Varv 2 ger ERROR 3 gånger
-# Varv 2 kraschar sedan på calculate_weights
+# Varv 2 ger ERROR 3 ggr
+# Varv 2 kraschar sedan vid calculate_weights
 
 # Test on 1, 2, 5, 10, 20, 50, 100 and 200 workers (maybe 400 too later on)
 start_time = time.time()
