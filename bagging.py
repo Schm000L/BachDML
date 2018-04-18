@@ -26,11 +26,6 @@ test_data = [
     ['Green', 4, 'Apple']
 ]
 
-number_of_workers = 2
-data_for_workers = []
-number_of_features = 15
-training_data = data_sort.makeSet("adult_data_big.txt", number_of_features)
-
 # TODO: Ta hänsyn till weights
 def extract_training_data(dataSet):
     data = []
@@ -55,79 +50,99 @@ def hard_extraction(dataSet, number_of_workers, worker_number, overlap):
     
     return data
 
-# Create threads
-threads = []
-for i in range(0, number_of_workers):
-    # threads.append(TreeThread(str(i), extract_training_data(training_data)))
-    threads.append(TreeThread(str(i), hard_extraction(training_data, number_of_workers, i, 10)))
-    # threads.append(TreeThread(str(i), "abalone_train.txt", number_of_features))
+def main_loop():
 
-# # Start threads
-# for i in range(0, len(threads)):
-#     # print(threads[i].threadID + " started")
-#     threads[i].start()
+     a = 0
+     number_of_workers_list = [1,2,5, 10, 20, 50, 100, 200, 400]
+     while a < len(number_of_workers_list):
+        # Create threads
+        number_of_workers = number_of_workers_list[a]
 
+        threads = []
+        for i in range(0, number_of_workers):
+            # threads.append(TreeThread(str(i), extract_training_data(training_data)))
+            threads.append(TreeThread(str(i), hard_extraction(training_data, number_of_workers, i, 10)))
+            # threads.append(TreeThread(str(i), "abalone_train.txt", number_of_features))
+
+        # # Start threads
+        # for i in range(0, len(threads)):
+        #     # print(threads[i].threadID + " started")
+        #     threads[i].start()
+
+        accuracy = 0
+        correct_prediction = 0
+        TPover50 = 0
+        FPover50 = 0
+        FNover50 = 0
+        TPunder50 = 0
+        FNunder50 = 0
+        FPunder50 = 0
+
+        # Test on testing_data
+        for i in range(0, len(test_data)):
+            classed = {}
+            prediction = []
+            for j in range(0, len(threads)):
+                prediction.append(threads[j].query(test_data[i]))
+
+            while len(prediction) < len(threads):
+                time.sleep(1)
+
+            for predicted in prediction:
+                label = max(predicted, key=lambda key: predicted[key])
+                if label not in classed:
+                    classed[label] = 0
+                classed[label] += 1
+            correct_lable = str(test_data[i][number_of_features - 1])
+            print(correct_lable)
+            # print(len(classed.values()))
+            # print(max(classed.values()))
+            predicted_lable = list(classed.keys())[list(classed.values()).index(max(classed.values()))]
+            print(predicted_lable, max(classed.values()))
+
+            if predicted_lable in correct_lable:
+                correct_prediction += 1
+                if ">50K" in predicted_lable:
+                    TPover50 += 1
+                else:
+                    TPunder50 += 1
+            else:
+                if ">50K" in predicted_lable:
+                    FPover50 += 1
+                    FNunder50 += 1
+                else:
+                    FNover50 += 1
+                    FPunder50 += 1
+
+        precission_over_50 = TPover50 / (TPover50 + FPover50)
+        recall_over_50 = TPover50 / (TPover50 + FNover50)
+        precission_under_50 = TPunder50 / (TPunder50 + FPunder50)
+        recall_under_50 = TPunder50 / (TPunder50 + FNunder50)
+        F1 = 2 * ((precission_over_50 + precission_under_50) / 2 * (recall_over_50 + recall_under_50) / 2) / (
+                    (precission_over_50 + precission_under_50) / 2 + (recall_over_50 + recall_under_50) / 2)
+        accuracy = correct_prediction / len(test_data)
+
+        file = open("workers" + str(number_of_workers) + ".txt", "w+")
+        print("Accuracy: ", str(accuracy))
+        print("Precision: ", str(precission_over_50))
+        print("Recall: ", str(recall_over_50))
+        print("F1 score: ", str(F1))
+        print("Execution time (s): ", time.time() - start_time)
+        file.write("Number of workers: "+ str(number_of_workers)+ "\n")
+        file.write("Accuracy: "+ str(accuracy) + "\n")
+        file.write("Execution time (s): " + str(time.time() - start_time) + "\n")
+        file.write("Precision: "+ str(precission_over_50)+ "\n")
+        file.write("Recall: "+ str(recall_over_50)+ "\n")
+        file.write("F1 score: "+ str(F1)+ "\n")
+        file.close()
+        print(str(i))
+        a+=1
+
+number_of_features = 15
+training_data = data_sort.makeSet("adult_data_big.txt", number_of_features)
 test_data = data_sort.makeSet("adult_data_test.txt", number_of_features)
+main_loop()
 
-accuracy = 0
-correct_prediction = 0
-TPover50 = 0
-FPover50 = 0
-FNover50 = 0
-TPunder50 = 0
-FNunder50 = 0
-FPunder50 = 0
-
-
-# Test on testing_data
-for i in range(0, len(test_data)):
-    classed = {}
-    prediction = []
-    for j in range(0, len(threads)):
-        prediction.append(threads[j].query(test_data[i]))
-    
-    while len(prediction) < len(threads):
-        time.sleep(1) 
-    
-    for predicted in prediction:
-        label = max(predicted, key=lambda key: predicted[key])
-        if label not in classed:
-            classed[label] = 0
-        classed[label] += 1
-    correct_lable = str(test_data[i][number_of_features-1])
-    print(correct_lable)
-    # print(len(classed.values()))
-    # print(max(classed.values()))
-    predicted_lable = list(classed.keys())[list(classed.values()).index(max(classed.values()))]
-    print(predicted_lable, max(classed.values()))
-
-    if predicted_lable in correct_lable:
-        correct_prediction += 1
-        if ">50K" in predicted_lable:
-            TPover50 += 1
-        else:
-            TPunder50 += 1
-    else:
-        if ">50K" in predicted_lable:
-            FPover50 +=1
-            FNunder50 +=1
-        else:
-            FNover50 += 1
-            FPunder50 += 1
-
-
-precission_over_50 = TPover50 / (TPover50 + FPover50)
-recall_over_50 = TPover50 / (TPover50 + FNover50)
-precission_under_50 = TPunder50/(TPunder50 + FPunder50)
-recall_under_50 = TPunder50/(TPunder50+FNunder50)
-F1 = 2*((precission_over_50+precission_under_50)/2 * (recall_over_50+recall_under_50)/2) / ((precission_over_50+precission_under_50)/2 + (recall_over_50+recall_under_50)/2)
-accuracy = correct_prediction/len(test_data)
-
-print("Accuracy: ", str(accuracy))
-print("Precision: ", str(precission_over_50))
-print("Recall: ", str(recall_over_50))
-print("F1 score: ", str(F1))
-print("Execution time (s): ", time.time() - start_time)
 
 # Single strong learner
 # print("Compare to a single strong learning: ")
