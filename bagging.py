@@ -139,7 +139,7 @@ def main_loop():
         a+=1
 
 number_of_features = 15
-training_data = data_sort.makeSet("adult_data_big.txt", number_of_features)
+training_data = data_sort.makeSet("adult_data.txt", number_of_features)
 test_data = data_sort.makeSet("adult_data_test.txt", number_of_features)
 main_loop()
 
