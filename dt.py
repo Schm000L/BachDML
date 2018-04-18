@@ -246,7 +246,7 @@ class Decision_Tree:
         if 1 not in counts:
             return -1
 
-        # TODO: Ena krockodimunnen är fel, för trött för att fixa nu
+        # TODO: Ena krockodimunnen fel, för trött för att fixa nu
         if counts[-1] > counts[1]:
             return -1
         elif counts[-1] <= counts[1]:
