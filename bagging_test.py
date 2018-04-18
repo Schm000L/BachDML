@@ -143,7 +143,7 @@ for q in range(0, 8):
     accuracy = correct_prediction/len(test_data)
 
     print("Accuracy: ", str(accuracy))
-    print("Precission: ", str(precission_over_50))
+    print("Precision: ", str(precission_over_50))
     print("Recall: ", str(recall_over_50))
     print("F1 score: ", str(F1))
     print("Execution time (s): ", time.time() - startTime)

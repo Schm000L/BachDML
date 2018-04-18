@@ -87,7 +87,7 @@ for i in range(0, len(test_data)):
         prediction.append(threads[j].query(test_data[i]))
     
     while len(prediction) < len(threads):
-        sleep(1) 
+        time.sleep(1) 
     
     for predicted in prediction:
         label = max(predicted, key=lambda key: predicted[key])
@@ -124,7 +124,7 @@ F1 = 2*((precission_over_50+precission_under_50)/2 * (recall_over_50+recall_unde
 accuracy = correct_prediction/len(test_data)
 
 print("Accuracy: ", str(accuracy))
-print("Precission: ", str(precission_over_50))
+print("Precision: ", str(precission_over_50))
 print("Recall: ", str(recall_over_50))
 print("F1 score: ", str(F1))
 print("Execution time (s): ", time.time() - startTime)

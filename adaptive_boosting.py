@@ -7,12 +7,12 @@ import time
 # NÅGOT ÄR GALET
 
 startTime = time.time()
-number_of_workers = 2
+number_of_workers = 3
 data_for_workers = []
 
 number_of_features = 15
 
-training_data = data_sort.makeSet("adult_data.txt", number_of_features)
+training_data = data_sort.makeSet("adult_data_big.txt", number_of_features)
 training_data, labels = data_sort.binaryfy(training_data)
 
 alpha = []
@@ -169,7 +169,7 @@ for i in range(0, len(test_data)):
         prediction += alpha[j] * threads[j].binary_query(test_data[i])
     
     # Make sure every thread has answered
-    time.sleep(0.05)
+    # time.sleep(0.0005)
 
     # # Wait to ensure that every worker has answered
     # while len(prediction) < len(threads):
@@ -217,7 +217,7 @@ F1 = 2*((precission_plus+precission_minus)/2 * (recall_plus+recall_minus)/2) / (
 accuracy = correct_prediction/len(test_data)
 
 print("Accuracy: ", str(accuracy))
-print("Precission: ", str(precission_plus))
+print("Precision: ", str(precission_plus))
 print("Recall: ", str(recall_minus))
 print("F1 score: ", str(F1))
 print("Execution time (s): ", time.time() - startTime)
