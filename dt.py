@@ -85,6 +85,7 @@ class Decision_Tree:
             counts[label] += 1
         return counts
 
+
     def partition(self, rows, question):
         """Partitions a dataset.
         For each row in the dataset, check if it matches the question. 
@@ -109,32 +110,6 @@ class Decision_Tree:
             impurity -= prob_of_lbl**2
         return impurity
 
-    #######
-    # Demo:
-    # Let's look at some example to understand how Gini Impurity works.
-    #
-    # First, we'll look at a dataset with no mixing.
-    # no_mixing = [['Apple'],
-    #              ['Apple']]
-    # this will return 0
-    # gini(no_mixing)
-    #
-    # Now, we'll look at dataset with a 50:50 apples:oranges ratio
-    # some_mixing = [['Apple'],
-    #               ['Orange']]
-    # this will return 0.5 - meaning, there's a 50% chance of misclassifying
-    # a random example we draw from the dataset.
-    # gini(some_mixing)
-    #
-    # Now, we'll look at a dataset with many different labels
-    # lots_of_mixing = [['Apple'],
-    #                  ['Orange'],
-    #                  ['Grape'],
-    #                  ['Grapefruit'],
-    #                  ['Blueberry']]
-    # This will return 0.8
-    # gini(lots_of_mixing)
-    #######
 
     def info_gain(self, left, right, current_uncertainty):
         """Information Gain.
@@ -143,40 +118,6 @@ class Decision_Tree:
         """
         p = float(len(left)) / (len(left) + len(right))
         return current_uncertainty - p * self.gini(left) - (1 - p) * self.gini(right)
-
-    #######
-    # Demo:
-    # Calculate the uncertainy of our training data.
-    # current_uncertainty = gini(training_data)
-    #
-    # How much information do we gain by partioning on 'Green'?
-    # true_rows, false_rows = partition(training_data, Question(0, 'Green'))
-    # info_gain(true_rows, false_rows, current_uncertainty)
-    #
-    # What about if we partioned on 'Red' instead?
-    # true_rows, false_rows = partition(training_data, Question(0,'Red'))
-    # info_gain(true_rows, false_rows, current_uncertainty)
-    #
-    # It looks like we learned more using 'Red' (0.37), than 'Green' (0.14).
-    # Why? Look at the different splits that result, and see which one
-    # looks more 'unmixed' to you.
-    # true_rows, false_rows = partition(training_data, Question(0,'Red'))
-    #
-    # Here, the true_rows contain only 'Grapes'.
-    # true_rows
-    #
-    # And the false rows contain two types of fruit. Not too bad.
-    # false_rows
-    #
-    # On the other hand, partitioning by Green doesn't help so much.
-    # true_rows, false_rows = partition(training_data, Question(0,'Green'))
-    #
-    # We've isolated one apple in the true rows.
-    # true_rows
-    #
-    # But, the false-rows are badly mixed up.
-    # false_rows
-    #######
 
     # Finds the best question to ask by iterating over every feature / value and calculating the information gain.
     def find_best_split(self, rows):
@@ -305,6 +246,7 @@ class Decision_Tree:
         if 1 not in counts:
             return -1
 
+        # TODO: Ena krockodimunnen är fel, för trött för att fixa nu
         if counts[-1] > counts[1]:
             return -1
         elif counts[-1] > counts[1]:

@@ -6,7 +6,7 @@ import time
 import math
 # TODO: Change prints to write to file and run on adult_data_big
 
-startTime = time.time()
+start_time = time.time()
 training_data = [
     ['Green', 3, 'Apple'],
     ['Red', 3, 'Apple'],
@@ -146,7 +146,7 @@ for q in range(0, 8):
     print("Precision: ", str(precission_over_50))
     print("Recall: ", str(recall_over_50))
     print("F1 score: ", str(F1))
-    print("Execution time (s): ", time.time() - startTime)
+    print("Execution time (s): ", time.time() - start_time)
 
 # Single strong learner
 # print("Compare to a single strong learning: ")
