@@ -8,14 +8,13 @@ import time
 # Varv 2 ger ERROR 3 ggr
 # Varv 2 kraschar sedan vid calculate_weights
 
-# Test on 1, 2, 5, 10, 20, 50, 100 and 200 workers (maybe 400 too later on)
 start_time = time.time()
-number_of_workers = 5
+number_of_workers = 3
 data_for_workers = []
 
 number_of_features = 15
 
-training_data = data_sort.makeSet("adult_data.txt", number_of_features)
+training_data = data_sort.makeSet("adult_data_big.txt", number_of_features)
 training_data, labels = data_sort.binaryfy(training_data)
 
 alpha = []

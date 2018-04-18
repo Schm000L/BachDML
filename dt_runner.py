@@ -1,6 +1,7 @@
 import decision_tree
 import threading
 import time
+import data_sort
 
 exitFlag = 0
 
@@ -62,15 +63,15 @@ testing_data = [
 ]
 
 
-
+number_of_features = 10
 # print(makeSet('scale_train.txt'))
-tree_1 = decision_tree.build_tree(makeSet('abalone.txt'))
+tree_1 = decision_tree.build_tree(data_sort.makeSet('abalone.txt',number_of_features))
 # tree_1 = decision_tree.build_tree(makeSet('scale_train.txt'))
 # tree_1 = decision_tree.build_tree(training_data_1)
 # tree_2 = decision_tree.build_tree(training_data_2)
 print("tree_1: ")
 # decision_tree.print_tree(tree_1)
-decision_tree.test(tree_1, makeSet('abalone_text.txt'))
+decision_tree.test(tree_1, data_sort.makeSet('abalone_text.txt', number_of_features))
 # decision_tree.test(tree_1, makeSet('scale_test.txt'))
 # decision_tree.test(tree_1, testing_data)
 print("")

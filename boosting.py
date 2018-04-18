@@ -34,7 +34,7 @@ weights = []
 for i in range(0, len(training_data)):
     weights.append(1)
 
-# TODO: Ta hänsyn till weights
+# TODO: Ta hänsyn till weights, görs i adaptive_boosting.py
 def extract_training_data(dataSet):
     data = []
     for n in range(0, int(round(0.6*len(dataSet)))):
@@ -68,7 +68,7 @@ for i in range(0, len(test_data_abalone)):
         prediction.append(threads[j].query(test_data_abalone[i]))
     
     while len(prediction) < len(threads):
-        sleep(1) 
+        time.sleep(1) 
     
     for predicted in prediction:
         label = max(predicted, key=lambda key: predicted[key])

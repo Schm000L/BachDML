@@ -87,7 +87,7 @@ for i in range(0, len(test_data)):
         prediction.append(threads[j].query(test_data[i]))
     
     while len(prediction) < len(threads):
-        sleep(1) 
+        time.sleep(1) 
     
     for predicted in prediction:
         label = max(predicted, key=lambda key: predicted[key])
