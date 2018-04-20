@@ -25,6 +25,7 @@ def makeSet(file, length):
             word = word.replace('\n', '')
             word = word.replace(" ", "")
             word = word.replace("'", "")
+            word = word.replace('.', '')
 
             if isfloat(word):
                 set.append(float(word))
