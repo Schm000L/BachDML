@@ -25,6 +25,7 @@ def makeSet(file, length):
             word = word.replace('\n', '')
             word = word.replace(" ", "")
             word = word.replace("'", "")
+            word = word.replace(".", "")
 
             if isfloat(word):
                 set.append(float(word))
@@ -60,5 +61,18 @@ def binaryfy(rows):
             print("Labels:", labels)
             print(row[-1])
     return rows, labels
+
+def split(data_set):
+    X = []
+    y = []
+    rows = data_set.copy()
+    for row in rows:
+        y.append(row[-1])
+        row.remove(row[-1])
+        # row[-1] = 15
+        X.append(row)
+    return X, y
+        
+
 
 # print(makeSet("abalone_train.txt", 9))
