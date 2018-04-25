@@ -257,31 +257,61 @@ class Decision_Tree:
 
 
 if __name__ == '__main__':
+    import data_sort
 
-    training_data = [
-        ['Green', 3, 'grapf', 'Apple'],
-        ['Yellow', 3, 'apf', 'Apple'],
-        ['Red', 1, 'grapf', 'Grape'],
-        ['Red', 1, 'grapf','Grape'],
-        ['Yellow', 3, 'lepf', 'Lemon']
-    ]
+    number_of_features = 15
+    training_data = data_sort.makeSet("adult_data.txt", number_of_features)
+    # training_data = data_sort.binaryfy(training_data)
+    test_data = data_sort.makeSet("adult_data_test.txt", number_of_features)
+    # test_data = data_sort.binaryfy(test_data)
+    print("Training")
 
+    accuracy = 0
+    correct_prediction = 0
+    true_positive_minus = 0
+    false_positive_minus = 0
+    false_negative_minus = 0
+    true_positive_plus = 0
+    false_negative_plus = 0
+    false_positive_plus = 0
     my_tree = Decision_Tree(training_data)
 
-    my_tree.print_tree()
+    # my_tree.print_tree()
+    print("Running test")
+    successful_prediction = 0
+    for i in range(0, len(test_data)):
+        correct_lable = test_data[i][-1]
+        predicted_lable = list(my_tree.predict(my_tree.tree, test_data[i]).keys())[0]
+        print("Pred", list(my_tree.predict(my_tree.tree, test_data[i]).keys())[0])
+        print("Corr", correct_lable)
+        if predicted_lable == correct_lable:
+            successful_prediction += 1
+            if ">50K" in predicted_lable:
+                    true_positive_plus += 1
+            else:
+                true_positive_minus += 1
+        else:
+            if ">50K" in predicted_lable:
+                false_positive_plus += 1
+                false_negative_minus += 1
+            else:
+                false_negative_plus += 1
+                false_positive_minus += 1
 
-    # Evaluate
-    testing_data = [
-        ['Green', 3, 'apf', 'Apple'],
-        ['Yellow', 4, 'grapf', 'Apple'],
-        ['Red', 2, 'grapf', 'Grape'],
-        ['Red', 1, 'apf','Grape'],
-        ['Yellow', 3, 'lepf', 'Lemon'],
-    ]
+    precission_plus = true_positive_plus / (true_positive_plus + false_positive_plus)
+    recall_plus = true_positive_plus / (true_positive_plus + false_negative_plus)
+    precission_minus = true_positive_minus/(true_positive_minus + false_positive_minus)
+    recall_minus = true_positive_minus/(true_positive_minus+false_negative_minus)
+    F1 = 2*((precission_plus+precission_minus)/2 * (recall_plus+recall_minus)/2) / ((precission_plus+precission_minus)/2 + (recall_plus+recall_minus)/2)
+    accuracy = correct_prediction/len(test_data)
 
-    for row in testing_data:
-        print ("Actual: %s. Predicted: %s" %
-               (row[-1], my_tree.print_leaf(my_tree.classify(row, my_tree.tree))))
+    print("Accuracy: ", str(accuracy))
+    print("Precision: ", str(precission_plus))
+    print("Recall: ", str(recall_minus))
+    print("F1 score: ", str(F1))
+    # for row in testing_data:
+    #     print ("Actual: %s. Predicted: %s" %
+    #            (row[-1], my_tree.print_leaf(my_tree.classify(row, my_tree.tree))))
 
 # Next steps
 # - add support for missing (or unseen) attributes
