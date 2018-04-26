@@ -258,9 +258,11 @@ class Decision_Tree:
 
 if __name__ == '__main__':
     import data_sort
+    import time
 
+    start_time = time.time()
     number_of_features = 15
-    training_data = data_sort.makeSet("adult_data.txt", number_of_features)
+    training_data = data_sort.makeSet("adult_data_unbiased.txt", number_of_features)
     # training_data = data_sort.binaryfy(training_data)
     test_data = data_sort.makeSet("adult_data_test.txt", number_of_features)
     # test_data = data_sort.binaryfy(test_data)
@@ -303,8 +305,9 @@ if __name__ == '__main__':
     precission_minus = true_positive_minus/(true_positive_minus + false_positive_minus)
     recall_minus = true_positive_minus/(true_positive_minus+false_negative_minus)
     F1 = 2*((precission_plus+precission_minus)/2 * (recall_plus+recall_minus)/2) / ((precission_plus+precission_minus)/2 + (recall_plus+recall_minus)/2)
-    accuracy = correct_prediction/len(test_data)
+    accuracy = successful_prediction/len(test_data)
 
+    print("Time", str(time.time()-start_time))
     print("Accuracy: ", str(accuracy))
     print("Precision: ", str(precission_plus))
     print("Recall: ", str(recall_minus))

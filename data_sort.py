@@ -25,11 +25,7 @@ def makeSet(file, length):
             word = word.replace('\n', '')
             word = word.replace(" ", "")
             word = word.replace("'", "")
-<<<<<<< HEAD
             word = word.replace(".", "")
-=======
-            word = word.replace('.', '')
->>>>>>> f8c78c2f3a6f4ed68cd7f4dd88ea29053eae7b9f
 
             if isfloat(word):
                 set.append(float(word))
