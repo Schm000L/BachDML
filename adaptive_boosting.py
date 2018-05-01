@@ -9,7 +9,7 @@ import time
 # Varv 2 kraschar sedan vid calculate_weights
 
 start_time = time.time()
-number_of_workers = 2
+number_of_workers = 5
 data_for_workers = []
 
 number_of_features = 15
@@ -60,11 +60,11 @@ def calculate_weights(weights, error_rate, alpha, data_set,  predictions):
     # print(ret)
     return ret
 
-# TODO: Ta hänsyn till weights
 def extract_training_data(data_set):
     data = []
     for n in range(0, int(round(0.6*len(data_set)))):
         data.append(data_set[randint(0, len(data_set)-1)])
+    print("Dataextraction done!", time.time()-start_time)
     return data
 
 def calculate_error_rate(worker_number, weights, data_set, predictions):
@@ -89,6 +89,7 @@ def calculate_alpha(worker_number, error_rate):
 # indxs = []
 def extract_weighted_data(data_set, weights):
     # indx = []
+    print("Extracting data")
     tmp_weights = weights.copy() # For scoping
     data = []
     for i in range(0, math.floor(0.6*len(data_set))):
@@ -99,6 +100,7 @@ def extract_weighted_data(data_set, weights):
         data.append(data_set[index])
         tmp_weights[index] = 0
     # indxs.append(indx)
+    print("Dataextraction done!", time.time()-start_time)
     return data
 
 def make_predictions(worker_number, data_set):
@@ -120,6 +122,7 @@ for i in range(0, number_of_workers):
     # for w in weights:
     #     w_sum += w
     # print("Sum of all weights", w_sum)
+    # threads.append(TreeThread(str(i), extract_training_data(training_data)))
     threads.append(TreeThread(str(i), extract_weighted_data(training_data, weights)))
     # dats.append(extract_weighted_data(training_data, weights))
     print("Getting predictions")

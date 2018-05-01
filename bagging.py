@@ -4,6 +4,7 @@ from dt_thread import TreeThread
 from random import randint
 import time
 import math
+import dt
 
 start_time = time.time()
 training_data = [
@@ -145,16 +146,16 @@ main_loop()
 
 
 # Single strong learner
-# print("Compare to a single strong learning: ")
-# strong_learner = Decision_Tree(training_data)
-
-# successful_prediction = 0
-# for i in range(0, len(test_data)):
-#     correct_lable = str(test_data[i][number_of_features-1])
-#     # print("Corr:",correct_lable)
-#     # print("Predicted:", list(strong_learner.predict(strong_learner.tree, test_data[i]).keys())[0])
-#     if list(strong_learner.predict(strong_learner.tree, test_data[i]).keys())[0] == correct_lable:
-#         successful_prediction += 1
-# acc = successful_prediction/(len(test_data))
-# print("Accuracy of strong learner", str(acc))
+print("Compare to a single strong learning: ")
+strong_learner = dt.Decision_Tree(training_data)
+print("Running test")
+successful_prediction = 0
+for i in range(0, len(test_data)):
+    correct_lable = str(test_data[i][number_of_features-1])
+    # print("Corr:",correct_lable)
+    # print("Predicted:", list(strong_learner.predict(strong_learner.tree, test_data[i]).keys())[0])
+    if list(strong_learner.predict(strong_learner.tree, test_data[i]).keys())[0] == correct_lable:
+        successful_prediction += 1
+acc = successful_prediction/(len(test_data))
+print("Accuracy of strong learner", str(acc))
     
