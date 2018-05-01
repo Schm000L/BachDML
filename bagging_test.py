@@ -29,7 +29,7 @@ test_data = [
 
 data_for_workers = []
 number_of_features = 15
-training_data = data_sort.makeSet("adult_data.txt", number_of_features)
+training_data = data_sort.makeSet("datasets/adult_data.txt", number_of_features)
 
 
 number_of_workers = 1
@@ -88,7 +88,7 @@ for q in range(0, 8):
     #     # print(threads[i].threadID + " started")
     #     threads[i].start()
 
-    test_data = data_sort.makeSet("adult_data_test.txt", number_of_features)
+    test_data = data_sort.makeSet("datasets/adult_data_test.txt", number_of_features)
 
     accuracy = 0
     correct_prediction = 0

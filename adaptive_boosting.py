@@ -14,7 +14,7 @@ data_for_workers = []
 
 number_of_features = 15
 
-training_data = data_sort.makeSet("adult_data_big.txt", number_of_features)
+training_data = data_sort.makeSet("datasets/adult_data.txt", number_of_features)
 training_data, labels = data_sort.binaryfy(training_data)
 
 alpha = []
@@ -150,7 +150,7 @@ for i in range(0, number_of_workers):
 
 # def run_test(test_data, thread_number):
 
-test_data = data_sort.makeSet("adult_data_test.txt", number_of_features)
+test_data = data_sort.makeSet("datasets/adult_data_test.txt", number_of_features)
 test_data, labels = data_sort.binaryfy(test_data)
 
 # correct_prediction = 0
