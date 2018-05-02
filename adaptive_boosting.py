@@ -58,21 +58,15 @@ def calculate_alpha(worker_number, error_rate):
     # print("Error rate", error_rate)
     return 1/2*math.log((1-error_rate+epsilon)/(error_rate+epsilon))
 
-# indxs = []
+# Extract the top weighted 60 % of the data set
 def extract_weighted_data(data_set, weights):
-    # indx = []
-    print("Extracting data")
+    # print("Extracting data")
     tmp_weights = weights.copy() # For scoping
     data = []
     for i in range(0, math.floor(0.6*len(data_set))):
-        # index = tmp_weights.index(max(tmp_weights))
-        # index, max_value = max(enumerate(tmp_weights), key=operator.itemgetter(1))
         index = tmp_weights.index(max(tmp_weights))
-        # indx.append(index)
         data.append(data_set[index])
         tmp_weights[index] = 0
-    # indxs.append(indx)
-    print("Dataextraction done!", time.time()-start_time)
     return data
 
 # Get predictions from the current ensemble
@@ -92,20 +86,20 @@ for i in range(0, number_of_workers):
     threads.append(TreeThread(str(i), extract_weighted_data(training_data, weights)))
     
     # Get predictions from the current ensemble
-    print("Getting predictions")
+    # print("Getting predictions")
     predictions = make_predictions(i, training_data)
 
     # Calculate the error rate
-    print("Calculating error_rate")
+    # print("Calculating error_rate")
     error = calculate_error_rate(i, weights, training_data, predictions)
 
     # Calculate alpha value for the newly trained model
-    print("Calculating alpha")
+    # print("Calculating alpha")
     alpha.append(calculate_alpha(i, error))
    
     # Calculate weights for the next iteration 
     if i != number_of_workers-1:
-        print("Calculating new weights")
+        # print("Calculating new weights")
         weights = calculate_weights(weights, error, alpha[i], training_data, predictions)
    
 

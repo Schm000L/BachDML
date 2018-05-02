@@ -16,7 +16,6 @@ print("Over 50k", over)
 print("Under 50k", under)
 print("Sum", over+under)
 
-
 print("Testing data")
 over = 0
 under = 0
