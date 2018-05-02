@@ -1,15 +1,12 @@
 import data_sort
 from dt_thread import TreeThread
+
 from random import randint
 import math
 import time
 
-# FEL: Varv 1 funkar till synes felfritt
-# Varv 2 ger ERROR 3 ggr
-# Varv 2 kraschar sedan vid calculate_weights
-
 start_time = time.time()
-number_of_workers = 5
+number_of_workers = 2
 data_for_workers = []
 
 number_of_features = 15
@@ -21,10 +18,10 @@ alpha = []
 epsilon = 0.001
 start_weight = 1/len(training_data)
 weights = []
-# print(start_weight)
 for n in range(0, len(training_data)):
     weights.append(start_weight)
 
+# Loss function only indirectly used
 # def loss_function(test_data):
 #     loss = 0
 #     for n in range(0, len(test_data)):
@@ -35,51 +32,26 @@ for n in range(0, len(training_data)):
 #         loss += exp(-m)
 #     return loss
 
-# def calculate_weight(old_weight, row, worker_number):
-#     Z = 1
-#     weight = old_weight * math.exp(row[-1]* alpha[worker_number]*threads[worker_number].binary_query(data_set[i])) / Z
-#     return weight
-
-
 def calculate_weights(weights, error_rate, alpha, data_set,  predictions):
-    # TODO: Properly calculate Z, maybe add predicted[] instead of querying
     temp_weights = weights.copy()
     ret = []
     # Z = error_rate*math.exp(alpha) + (1-error_rate)*math.exp(-alpha)
     Z = 2*math.sqrt((error_rate+epsilon)*(1-(error_rate+epsilon)))
-    for i in range(0, len(temp_weights)):
-        # print("Old:", temp_weights[i])    
-        ret.append((temp_weights[i] * math.exp(-1*data_set[i][-1] * alpha * predictions[i])) / Z)
-        # print("Checking preds")
-        # print((math.exp(-1*alpha * data_set[i][-1] * predictions[i])))
-        
-        # if temp_weights[i] < 0:
-        #     print('Weighing error', temp_weights[i])
-        #     print("Alpha", alpha, "Prediction", predictions[i], "Corr", data_set[i][-1])
-        #     print("Exp", math.exp(data_set[i][-1] * alpha * predictions[i]))
-    # print(ret)
+    # Calculate the new weights and add to the return array
+    for i in range(0, len(temp_weights)):   
+        ret.append((temp_weights[i] * math.exp(-1*data_set[i][-1] * alpha * predictions[i])) / Z)   
     return ret
 
-def extract_training_data(data_set):
-    data = []
-    for n in range(0, int(round(0.6*len(data_set)))):
-        data.append(data_set[randint(0, len(data_set)-1)])
-    print("Dataextraction done!", time.time()-start_time)
-    return data
-
+# Sum of the weights for all incorrectly predicted tuples
 def calculate_error_rate(worker_number, weights, data_set, predictions):
     error_rate = 0
     num_errors = 0
     for i in range(0, len(data_set)):
         if data_set[i][-1] != predictions[i]:
             error_rate += weights[i]
-            num_errors += 1
-            # print("Error detected:", "predicted", predictions[i], "was", data_set[i][-1])
-            # print("Weight:", weights[i])
+            num_errors += 1         
     if error_rate == 0 and num_errors != 0:
         print("Rounding error")
-    # if num_errors == 0:
-    #     print("Woah, we got all of them right!!!")
     return error_rate
 
 def calculate_alpha(worker_number, error_rate):
@@ -103,42 +75,39 @@ def extract_weighted_data(data_set, weights):
     print("Dataextraction done!", time.time()-start_time)
     return data
 
+# Get predictions from the current ensemble
 def make_predictions(worker_number, data_set):
     predictions = []
     for n in range(0, len(data_set)):
         predictions.append(threads[worker_number].binary_query(data_set[n]))
     return predictions
 
-# preds  = []
-# dats = []
-# wghts = []
 
 # Create threads, train and evaluate them
 threads = []
 for i in range(0, number_of_workers):
-    # wghts.append(weights)
+    
+    # Create new thread, thread constructor automatically trains the model
     print("Training", i+1, "at time", time.time()-start_time)
-    w_sum = 0
-    # for w in weights:
-    #     w_sum += w
-    # print("Sum of all weights", w_sum)
-    # threads.append(TreeThread(str(i), extract_training_data(training_data)))
     threads.append(TreeThread(str(i), extract_weighted_data(training_data, weights)))
-    # dats.append(extract_weighted_data(training_data, weights))
+    
+    # Get predictions from the current ensemble
     print("Getting predictions")
-    predictions = make_predictions(i, training_data)    
-    # preds.append(predictions)
+    predictions = make_predictions(i, training_data)
+
+    # Calculate the error rate
     print("Calculating error_rate")
     error = calculate_error_rate(i, weights, training_data, predictions)
-    # print("error:", i, error)
+
+    # Calculate alpha value for the newly trained model
     print("Calculating alpha")
     alpha.append(calculate_alpha(i, error))
-    # print('Alpha', alpha[i])
+   
+    # Calculate weights for the next iteration 
     if i != number_of_workers-1:
         print("Calculating new weights")
         weights = calculate_weights(weights, error, alpha[i], training_data, predictions)
-    # print("Alpha:", alpha[i])
-    # threads.append(TreeThread(str(i), "abalone_train.txt", number_of_features)
+   
 
 # diff = 0
 # for m in range(0, number_of_workers):
@@ -147,18 +116,10 @@ for i in range(0, number_of_workers):
 #             diff += 1
 # print("diff", diff)
 
-# # Start threads
-# for i in range(0, len(threads)):
-#     # print(threads[i].threadID + " started")
-
-# def run_test(test_data, thread_number):
-
+# Start test -------------------------------------------------------------------------------
 test_data = data_sort.makeSet("datasets/adult_data_test.txt", number_of_features)
 test_data, labels = data_sort.binaryfy(test_data)
 
-# correct_prediction = 0
-
-# false_negative_x == false_positive_y
 accuracy = 0
 correct_prediction = 0
 true_positive_minus = 0
@@ -170,7 +131,6 @@ false_positive_plus = 0
 
 
 print("RUNNING TEST")
-# Test on test_data
 for i in range(0, len(test_data)):
     prediction  = 0 
     for j in range(0, len(threads)):
@@ -189,6 +149,7 @@ for i in range(0, len(test_data)):
     elif prediction <= 0:
         prediction = -1
 
+    # prediction was correct
     if prediction == test_data[i][-1]:
         correct_prediction += 1
     
@@ -216,20 +177,22 @@ for i in range(0, len(test_data)):
     #     else:
     #         print("Predicted: ", labels[1])
     #         print("on", test_data[i])
-precission_plus = true_positive_plus / (true_positive_plus + false_positive_plus)
+
+# Calculate accuracy, precision, recall and F1-score
+precision_plus = true_positive_plus / (true_positive_plus + false_positive_plus)
 recall_plus = true_positive_plus / (true_positive_plus + false_negative_plus)
-precission_minus = true_positive_minus/(true_positive_minus + false_positive_minus)
+precision_minus = true_positive_minus/(true_positive_minus + false_positive_minus)
 recall_minus = true_positive_minus/(true_positive_minus+false_negative_minus)
-F1 = 2*((precission_plus+precission_minus)/2 * (recall_plus+recall_minus)/2) / ((precission_plus+precission_minus)/2 + (recall_plus+recall_minus)/2)
+F1 = 2*((precision_plus+precision_minus)/2 * (recall_plus+recall_minus)/2) / ((precision_plus+precision_minus)/2 + (recall_plus+recall_minus)/2)
 accuracy = correct_prediction/len(test_data)
 
 print("Accuracy: ", str(accuracy))
-print("Precision: ", str(precission_plus))
+print("Precision: ", str(precision_plus))
 print("Recall: ", str(recall_minus))
 print("F1 score: ", str(F1))
 print("Execution time (s): ", time.time() - start_time)
 
-# Single strong learner
+# Single strong learner --------------------------------------------------------------------------
 # print("Compare to a single strong learning: ")
 # strong_learner = Decision_Tree(training_data)
 
@@ -253,7 +216,3 @@ print("Execution time (s): ", time.time() - start_time)
 #         prediction = 1
 #     elif prediction <= 0:
 #         prediction = -1
-
-
-# Make training data on the form: feature feature ... lable (-1, 1)
-# Label contains the actual labels
