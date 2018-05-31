@@ -65,7 +65,7 @@ testing_data = [
 
 number_of_features = 10
 # print(makeSet('scale_train.txt'))
-tree_1 = decision_tree.build_tree(data_sort.makeSet('abalone.txt',number_of_features))
+tree_1 = decision_tree.build_tree(data_sort.makeSet('datasets/abalone.txt',number_of_features))
 # tree_1 = decision_tree.build_tree(makeSet('scale_train.txt'))
 # tree_1 = decision_tree.build_tree(training_data_1)
 # tree_2 = decision_tree.build_tree(training_data_2)

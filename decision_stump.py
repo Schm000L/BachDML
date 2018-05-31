@@ -1,9 +1,10 @@
-# Modified version of random-forests's orginal which can be found at: https://github.com/random-forests/tutorials/blob/master/decision_tree.py
+# Modified version of random-forests's orginal which can be found at: https://github.com/random-forests/tutorials/blob/master/decision_stump.py
 # Tutorial at https://www.youtube.com/watch?v=LDRbO9a6XPU
 
 # For Python 2 / 3 compatability
 from __future__ import print_function
 
+# This class could actually just be replaced with its function (and a variable)
 class Leaf:
     """A Leaf node classifies data.
     This holds a dictionary of class (e.g., "Apple") -> number of times it appears in the rows from the training data that reach this leaf."""
@@ -59,16 +60,15 @@ class Question:
             condition = ">="
         return "Is %s %s?" % (condition, str(self.value))
 
-# Toy dataset.
 # Format: each row is an example.
 # The last column is the label.
 # The first two columns are features.
-class Decision_Tree:
+class Decision_Stump:
     training_data = []
 
     def __init__(self, training_data):
         self.training_data = training_data
-        self.tree = self.build_tree(self.training_data)
+        self.stump = self.build_stump(self.training_data)
 
     # Finds the unique values for a column in a dataset.
     def unique_vals(self, rows, col):
@@ -102,7 +102,7 @@ class Decision_Tree:
     # Calculates the Gini Impurity for a list of rows.
     def gini(self, rows):
         """There are a few different ways to do this, I thought this one was
-        the most concise. See: https://en.wikipedia.org/wiki/Decision_tree_learning#Gini_impurity """
+        the most concise. See: https://en.wikipedia.org/wiki/Decision_stump_learning#Gini_impurity """
         counts = self.class_counts(rows)
         impurity = 1
         for lbl in counts:
@@ -145,17 +145,16 @@ class Decision_Tree:
                     gain = self.info_gain(true_rows, false_rows, current_uncertainty) # Calculate the information gain from this split
                     if gain > best_gain: # You can use either '>' or '>=' here
                         best_gain, best_question = gain, question
-
         return best_gain, best_question
 
-    def build_tree(self, rows):
-        """Builds the tree.
+    def build_stump(self, rows):
+        """Builds the stump.
         Rules of recursion: 1) Believe that it works. 2) Start by checking
         for the base case (no further information gain). 3) Prepare for
         giant stack traces.
         """
 
-        # Try partitioing the dataset on each of the unique attribute,
+        # Try partitioning the dataset on each of the unique attribute,
         # calculate the information gain,
         # and return the question that produces the highest gain.
         gain, question = self.find_best_split(rows)
@@ -171,10 +170,10 @@ class Decision_Tree:
         true_rows, false_rows = self.partition(rows, question)
 
         # Recursively build the true branch.
-        true_branch = self.build_tree(true_rows)
+        true_branch = Leaf(true_rows)
 
         # Recursively build the false branch.
-        false_branch = self.build_tree(false_rows)
+        false_branch = Leaf(false_rows)
 
         # Return a Question node.
         # This records the best feature / value to ask at this point,
@@ -182,15 +181,12 @@ class Decision_Tree:
         # dependingo on the answer.
         return Decision_Node(question, true_branch, false_branch)
 
-    # def print_tree(self, *args)
-    #     print(len(args))
-    #     print_tree(self.tree)
-    def print_tree(self):
-        self.print_nodes(self.tree)
+    # Allows call foostump.print_stump() instead of foostump.print_nodes(foostump.stump)
+    def print_stump(self):
+        self.print_nodes(self.stump)
 
     def print_nodes(self, node, spacing=""):
-        """World's most elegant tree printing function."""
-
+        """World's most elegant stump printing function."""
         # Base case: we've reached a leaf
         if isinstance(node, Leaf):
             print (spacing + "Predict", node.predictions)
@@ -231,22 +227,20 @@ class Decision_Tree:
             probs[lbl] = str(int(counts[lbl] / total * 100)) + "%"
         return probs
 
-    def test(self, decision_tree, rows):
+    def test(self, decision_stump, rows):
         for row in rows:
-            print ("Actual: %s. Predicted: %s" % (row[-1], self.print_leaf(self.classify(row, decision_tree))))
+            print ("Actual: %s. Predicted: %s" % (row[-1], self.print_leaf(self.classify(row, decision_stump))))
 
-    def predict(self, decision_tree, row):
-            return self.print_leaf(self.classify(row, decision_tree))
+    def predict(self, decision_stump, row):
+            return self.print_leaf(self.classify(row, decision_stump))
 
-    def binary_prediction(self, decision_tree, row):
-        
-        counts = self.classify(row, decision_tree)
+    def binary_prediction(self, decision_stump, row):
+        counts = self.classify(row, decision_stump)
         if -1 not in counts:
             return 1
         if 1 not in counts:
             return -1
 
-        # TODO: Ena krockodimunnen fel, för trött för att fixa nu
         if counts[-1] > counts[1]:
             return -1
         elif counts[-1] <= counts[1]:
@@ -261,63 +255,61 @@ if __name__ == '__main__':
     import time
 
     start_time = time.time()
-    number_of_features = 7
-    training_data = data_sort.makeSet("datasets/car.txt", number_of_features)
+    number_of_features = 15
+    training_data = data_sort.makeSet("datasets/adult_data.txt", number_of_features)
     # training_data = data_sort.binaryfy(training_data)
-    test_data = data_sort.makeSet("datasets/car_test.txt", number_of_features)
+    test_data = data_sort.makeSet("datasets/adult_data_test.txt", number_of_features)
     # test_data = data_sort.binaryfy(test_data)
     print("Training")
 
-    accuracy = 0
-    correct_prediction = 0
-    true_positive_minus = 0
-    false_positive_minus = 0
-    false_negative_minus = 0
-    true_positive_plus = 0
-    false_negative_plus = 0
-    false_positive_plus = 0
-    my_tree = Decision_Tree(training_data)
+    # accuracy = 0
+    # correct_prediction = 0
+    # true_positive_minus = 0
+    # false_positive_minus = 0
+    # false_negative_minus = 0
+    # true_positive_plus = 0
+    # false_negative_plus = 0
+    # false_positive_plus = 0
+    my_stump = Decision_Stump(training_data)
 
-    # my_tree.print_tree()
-    print("Running test")
-    successful_prediction = 0
-    for i in range(0, len(test_data)):
-        correct_lable = test_data[i][-1]
-        predicted_lable = list(my_tree.predict(my_tree.tree, test_data[i]).keys())[0]
-        # print("Pred", list(my_tree.predict(my_tree.tree, test_data[i]).keys())[0])
-        # print("Corr", correct_lable)
-        if predicted_lable == correct_lable:
-            successful_prediction += 1
-            if "acc" == predicted_lable:
-                true_positive_plus += 1
-            else:
-                true_positive_minus += 1
-        else:
-            if "acc" == predicted_lable:
-                
-                false_positive_plus += 1
-                false_negative_minus += 1
-            else:
-                false_negative_plus += 1
-                false_positive_minus += 1
+    my_stump.print_stump()
+    # print("Running test")
+    # successful_prediction = 0
+    # for i in range(0, len(test_data)):
+    #     correct_lable = test_data[i][-1]
+    #     predicted_lable = list(my_stump.predict(my_stump.stump, test_data[i]).keys())[0]
+    #     print("Pred", list(my_stump.predict(my_stump.stump, test_data[i]).keys())[0])
+    #     print("Corr", correct_lable)
+    #     if predicted_lable == correct_lable:
+    #         successful_prediction += 1
+    #         if ">50K" in predicted_lable:
+    #                 true_positive_plus += 1
+    #         else:
+    #             true_positive_minus += 1
+    #     else:
+    #         if ">50K" in predicted_lable:
+    #             false_positive_plus += 1
+    #             false_negative_minus += 1
+    #         else:
+    #             false_negative_plus += 1
+    #             false_positive_minus += 1
 
-    precission_plus = 0 if true_positive_plus == 0 else true_positive_plus / (true_positive_plus + false_positive_plus)
-    recall_plus = 0 if true_positive_plus == 0 else true_positive_plus / (true_positive_plus + false_negative_plus)
-    precission_minus = 0 if true_positive_minus == 0 else true_positive_minus/(true_positive_minus + false_positive_minus)
-    recall_minus = 0 if true_positive_minus == 0 else true_positive_minus/(true_positive_minus+false_negative_minus)
-    F1 = 2*((precission_plus+precission_minus)/2 * (recall_plus+recall_minus)/2) / ((precission_plus+precission_minus)/2 + (recall_plus+recall_minus)/2)
-    accuracy = successful_prediction/len(test_data)
+    # precission_plus = true_positive_plus / (true_positive_plus + false_positive_plus)
+    # recall_plus = true_positive_plus / (true_positive_plus + false_negative_plus)
+    # precission_minus = true_positive_minus/(true_positive_minus + false_positive_minus)
+    # recall_minus = true_positive_minus/(true_positive_minus+false_negative_minus)
+    # F1 = 2*((precission_plus+precission_minus)/2 * (recall_plus+recall_minus)/2) / ((precission_plus+precission_minus)/2 + (recall_plus+recall_minus)/2)
+    # accuracy = successful_prediction/len(test_data)
 
     print("Time", str(time.time()-start_time))
-    print("Accuracy: ", str(accuracy))
-    print("Precision: ", str(precission_plus))
-    print("Recall: ", str(recall_plus))
-    print("F1 score: ", str(F1))
-    # my_tree.print_tree()
+    # print("Accuracy: ", str(accuracy))
+    # print("Precision: ", str(precission_plus))
+    # print("Recall: ", str(recall_minus))
+    # print("F1 score: ", str(F1))
     # for row in testing_data:
     #     print ("Actual: %s. Predicted: %s" %
-    #            (row[-1], my_tree.print_leaf(my_tree.classify(row, my_tree.tree))))
+    #            (row[-1], my_stump.print_leaf(my_stump.classify(row, my_stump.stump))))
 
 # Next steps
 # - add support for missing (or unseen) attributes
-# - prune the tree to prevent overfitting
+# - prune the stump to prevent overfitting
