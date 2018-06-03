@@ -5,6 +5,7 @@ from random import randint
 import math
 import time
 
+#number_of_workers_list = [1,2,5, 10, 20, 50, 100]
 start_time = time.time()
 number_of_workers = 2
 data_for_workers = []
@@ -177,12 +178,12 @@ precision_plus = true_positive_plus / (true_positive_plus + false_positive_plus)
 recall_plus = true_positive_plus / (true_positive_plus + false_negative_plus)
 precision_minus = true_positive_minus/(true_positive_minus + false_positive_minus)
 recall_minus = true_positive_minus/(true_positive_minus+false_negative_minus)
-F1 = 2*((precision_plus+precision_minus)/2 * (recall_plus+recall_minus)/2) / ((precision_plus+precision_minus)/2 + (recall_plus+recall_minus)/2)
+F1 = 2*((precision_plus * recall_plus) / (precision_plus + recall_plus))
 accuracy = correct_prediction/len(test_data)
 
 print("Accuracy: ", str(accuracy))
 print("Precision: ", str(precision_plus))
-print("Recall: ", str(recall_minus))
+print("Recall: ", str(recall_plus))
 print("F1 score: ", str(F1))
 print("Execution time (s): ", time.time() - start_time)
 

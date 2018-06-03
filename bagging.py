@@ -54,7 +54,7 @@ def hard_extraction(dataSet, number_of_workers, worker_number, overlap):
 def main_loop():
 
      a = 0
-     number_of_workers_list = [1,2,5, 10, 20, 50, 100, 200, 400]
+     number_of_workers_list = [1,2,5, 10, 20, 50, 100]
      while a < len(number_of_workers_list):
         # Create threads
         number_of_workers = number_of_workers_list[a]
@@ -121,9 +121,11 @@ def main_loop():
         recall_under_50 = TPunder50 / (TPunder50 + FNunder50)
         F1 = 2 * ((precission_over_50 + precission_under_50) / 2 * (recall_over_50 + recall_under_50) / 2) / (
                     (precission_over_50 + precission_under_50) / 2 + (recall_over_50 + recall_under_50) / 2)
+
+        F1 = 2 * ((precission_over_50 *recall_over_50) /  (precission_over_50 + recall_over_50))
         accuracy = correct_prediction / len(test_data)
 
-        file = open("workers" + str(number_of_workers) + ".txt", "w+")
+        file = open("HDPBIG" + "workers" + str(number_of_workers) + ".txt", "w+")
         print("Accuracy: ", str(accuracy))
         print("Precision: ", str(precission_over_50))
         print("Recall: ", str(recall_over_50))
@@ -140,7 +142,7 @@ def main_loop():
         a+=1
 
 number_of_features = 15
-training_data = data_sort.makeSet("datasets/adult_data_medium.txt", number_of_features)
+training_data = data_sort.makeSet("datasets/adult_data_big.txt", number_of_features)
 test_data = data_sort.makeSet("datasets/adult_data_test.txt", number_of_features)
 main_loop()
 
