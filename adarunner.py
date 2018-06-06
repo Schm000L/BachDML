@@ -1,3 +1,5 @@
+# adaptive_boosting.py modifed for (somewhat) more efficient testing
+
 import data_sort
 from dt_thread import TreeThread
 
@@ -5,13 +7,13 @@ from random import randint
 import math
 import time
 
-number_of_workers_list = [1,2,5, 10, 20, 50, 100]
+number_of_workers_list = [200, 400]
 
-number_of_features = 15
-training_data = data_sort.makeSet("datasets/adult_data_big.txt", number_of_features)
+number_of_features = 7
+training_data = data_sort.makeSet("datasets/car_split_train.txt", number_of_features)
 training_data, labels = data_sort.binaryfy(training_data)
 print(len(training_data))
-test_data = data_sort.makeSet("datasets/adult_data_test.txt", number_of_features)
+test_data = data_sort.makeSet("datasets/car_split_test.txt", number_of_features)
 test_data, labels = data_sort.binaryfy(test_data)
 
 # Loss function only indirectly used
@@ -69,52 +71,10 @@ def make_predictions(worker_number, data_set):
         predictions.append(threads[worker_number].binary_query(data_set[n]))
     return predictions
 
-a=0
-while a < len(number_of_workers_list):
-    start_time = time.time()
-    number_of_workers = number_of_workers_list[a]
-    alpha = []
-    epsilon = 0.001
-    start_weight = 1/len(training_data)
-    weights = []
-    for n in range(0, len(training_data)):
-        weights.append(start_weight)
 
-
-# Create threads, train and evaluate them
-    threads = []
-    for i in range(0, number_of_workers):
-        
-        # Create new thread, thread constructor automatically trains the model
-        print("Training", i+1, "at time", time.time()-start_time)
-        threads.append(TreeThread(str(i), extract_weighted_data(training_data, weights)))
-        
-        # Get predictions from the current ensemble
-        # print("Getting predictions")
-        predictions = make_predictions(i, training_data)
-
-        # Calculate the error rate
-        # print("Calculating error_rate")
-        error = calculate_error_rate(i, weights, training_data, predictions)
-
-        # Calculate alpha value for the newly trained model
-        # print("Calculating alpha")
-        alpha.append(calculate_alpha(i, error))
-    
-        # Calculate weights for the next iteration 
-        if i != number_of_workers-1:
-            # print("Calculating new weights")
-            weights = calculate_weights(weights, error, alpha[i], training_data, predictions)
-    
-
-    # diff = 0
-    # for m in range(0, number_of_workers):
-    #     for n in range(0, number_of_workers):
-    #         if dats[m] != dats[n]:
-    #             diff += 1
-    # print("diff", diff)
 
     # Start test -------------------------------------------------------------------------------
+def test(num_work):
     accuracy = 0
     correct_prediction = 0
     true_positive_minus = 0
@@ -183,20 +143,58 @@ while a < len(number_of_workers_list):
 
 
 
-    file = open("BoostBIG" + "workers" + str(number_of_workers) + ".txt", "w+")
+    file = open("BoostCar" + "workers" + str(num_work) + ".txt", "w+")
     print("Accuracy: ", str(accuracy))
     print("Precision: ", str(precision_plus))
     print("Recall: ", str(recall_plus))
     print("F1 score: ", str(F1))
     print("Execution time (s): ", time.time() - start_time)
-    file.write("Number of workers: "+ str(number_of_workers)+ "\n")
+    file.write("Number of workers: "+ str(num_work)+ "\n")
     file.write("Accuracy: "+ str(accuracy) + "\n")
     file.write("Execution time (s): " + str(time.time() - start_time) + "\n")
     file.write("Precision: "+ str(precision_plus)+ "\n")
     file.write("Recall: "+ str(recall_plus)+ "\n")
     file.write("F1 score: "+ str(F1)+ "\n")
     file.close()
-    a+=1
+
+start_time = time.time()
+number_of_workers = number_of_workers_list[-1]
+alpha = []
+epsilon = 0.001
+start_weight = 1/len(training_data)
+weights = []
+for n in range(0, len(training_data)):
+    weights.append(start_weight)
+
+
+# Create threads, train and evaluate them
+threads = []
+a=0
+for i in range(0, number_of_workers):
+    # Create new thread, thread constructor automatically trains the model
+    print("Training", i+1, "at time", time.time()-start_time)
+    threads.append(TreeThread(str(i), extract_weighted_data(training_data, weights)))
+        
+    # Get predictions from the current ensemble
+    # print("Getting predictions")
+    predictions = make_predictions(i, training_data)
+
+    # Calculate the error rate
+    # print("Calculating error_rate")
+    error = calculate_error_rate(i, weights, training_data, predictions)
+
+    # Calculate alpha value for the newly trained model
+    # print("Calculating alpha")
+    alpha.append(calculate_alpha(i, error))
+    
+    # Calculate weights for the next iteration 
+    if i != number_of_workers-1:
+        # print("Calculating new weights")
+        weights = calculate_weights(weights, error, alpha[i], training_data, predictions)
+        
+    if i+1 == number_of_workers_list[a]:
+        test(i+1)
+        a+=1
 
 # Single strong learner --------------------------------------------------------------------------
 # print("Compare to a single strong learning: ")

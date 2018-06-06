@@ -1,3 +1,5 @@
+# To count class occurances
+
 import data_sort
 
 number_of_features = 15
