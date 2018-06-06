@@ -1,3 +1,5 @@
+# Helper functions for handling datasets
+
 def isfloat(value):
     try:
         float(value)

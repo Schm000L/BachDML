@@ -261,10 +261,10 @@ if __name__ == '__main__':
     import time
 
     start_time = time.time()
-    number_of_features = 7
-    training_data = data_sort.makeSet("datasets/car.txt", number_of_features)
+    number_of_features = 15
+    training_data = data_sort.makeSet("datasets/adult_data_big.txt", number_of_features)
     # training_data = data_sort.binaryfy(training_data)
-    test_data = data_sort.makeSet("datasets/car_test.txt", number_of_features)
+    test_data = data_sort.makeSet("datasets/adult_data_test.txt", number_of_features)
     # test_data = data_sort.binaryfy(test_data)
     print("Training")
 
@@ -288,12 +288,12 @@ if __name__ == '__main__':
         # print("Corr", correct_lable)
         if predicted_lable == correct_lable:
             successful_prediction += 1
-            if "acc" == predicted_lable:
+            if ">50K" == predicted_lable:
                 true_positive_plus += 1
             else:
                 true_positive_minus += 1
         else:
-            if "acc" == predicted_lable:
+            if ">50K" == predicted_lable:
                 
                 false_positive_plus += 1
                 false_negative_minus += 1
@@ -303,10 +303,9 @@ if __name__ == '__main__':
 
     precission_plus = 0 if true_positive_plus == 0 else true_positive_plus / (true_positive_plus + false_positive_plus)
     recall_plus = 0 if true_positive_plus == 0 else true_positive_plus / (true_positive_plus + false_negative_plus)
-    # precission_minus = 0 if true_positive_minus == 0 else true_positive_minus/(true_positive_minus + false_positive_minus)
-    # recall_minus = 0 if true_positive_minus == 0 else true_positive_minus/(true_positive_minus+false_negative_minus)
-    # F1 = 2*((precission_plus+precission_minus)/2 * (recall_plus+recall_minus)/2) / ((precission_plus+precission_minus)/2 + (recall_plus+recall_minus)/2)
-    F1 = 2*precission_plus*recall_plus / (precission_plus+recall_plus)
+    precission_minus = 0 if true_positive_minus == 0 else true_positive_minus/(true_positive_minus + false_positive_minus)
+    recall_minus = 0 if true_positive_minus == 0 else true_positive_minus/(true_positive_minus+false_negative_minus)
+    F1 = 2*((precission_plus * recall_plus) / (precission_plus + recall_plus))
     accuracy = successful_prediction/len(test_data)
 
     print("Time", str(time.time()-start_time))

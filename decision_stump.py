@@ -1,5 +1,6 @@
 # Modified version of random-forests's orginal which can be found at: https://github.com/random-forests/tutorials/blob/master/decision_stump.py
 # Tutorial at https://www.youtube.com/watch?v=LDRbO9a6XPU
+# Changes include making the components into objects(classes) and only making stumps (trees with depth of 1)
 
 # For Python 2 / 3 compatability
 from __future__ import print_function
