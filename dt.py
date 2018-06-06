@@ -303,9 +303,10 @@ if __name__ == '__main__':
 
     precission_plus = 0 if true_positive_plus == 0 else true_positive_plus / (true_positive_plus + false_positive_plus)
     recall_plus = 0 if true_positive_plus == 0 else true_positive_plus / (true_positive_plus + false_negative_plus)
-    precission_minus = 0 if true_positive_minus == 0 else true_positive_minus/(true_positive_minus + false_positive_minus)
-    recall_minus = 0 if true_positive_minus == 0 else true_positive_minus/(true_positive_minus+false_negative_minus)
-    F1 = 2*((precission_plus+precission_minus)/2 * (recall_plus+recall_minus)/2) / ((precission_plus+precission_minus)/2 + (recall_plus+recall_minus)/2)
+    # precission_minus = 0 if true_positive_minus == 0 else true_positive_minus/(true_positive_minus + false_positive_minus)
+    # recall_minus = 0 if true_positive_minus == 0 else true_positive_minus/(true_positive_minus+false_negative_minus)
+    # F1 = 2*((precission_plus+precission_minus)/2 * (recall_plus+recall_minus)/2) / ((precission_plus+precission_minus)/2 + (recall_plus+recall_minus)/2)
+    F1 = 2*precission_plus*recall_plus / (precission_plus+recall_plus)
     accuracy = successful_prediction/len(test_data)
 
     print("Time", str(time.time()-start_time))
