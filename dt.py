@@ -59,10 +59,6 @@ class Question:
             condition = ">="
         return "Is %s %s?" % (condition, str(self.value))
 
-# Toy dataset.
-# Format: each row is an example.
-# The last column is the label.
-# The first two columns are features.
 class Decision_Tree:
     training_data = []
 
@@ -182,9 +178,6 @@ class Decision_Tree:
         # dependingo on the answer.
         return Decision_Node(question, true_branch, false_branch)
 
-    # def print_tree(self, *args)
-    #     print(len(args))
-    #     print_tree(self.tree)
     def print_tree(self):
         self.print_nodes(self.tree)
 

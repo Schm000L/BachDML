@@ -1,6 +1,5 @@
 import data_sort
 from dt_thread import TreeThread
-# from dt import Decision_Tree
 from random import randint
 import time
 import math
@@ -26,7 +25,7 @@ test_data = [
     ['Green', 4, 'Apple']
 ]
 
-# TODO: Ta hänsyn till weights
+
 def extract_training_data(dataSet):
     data = []
     for n in range(0, int(round(0.6*len(dataSet)))):
@@ -77,8 +76,6 @@ def test(num_work, threads):
             classed[label] += 1
         correct_lable = str(test_data[i][number_of_features - 1])
         print(correct_lable)
-        # print(len(classed.values()))
-        # print(max(classed.values()))
         predicted_lable = list(classed.keys())[list(classed.values()).index(max(classed.values()))]
         print(predicted_lable, max(classed.values()))
 
@@ -96,24 +93,22 @@ def test(num_work, threads):
                 FNover50 += 1
                 FPunder50 += 1
 
-    precission_over_50 = TPover50 / (TPover50 + FPover50)
-    recall_over_50 = TPover50 / (TPover50 + FNover50)
-    #precission_under_50 = TPunder50 / (TPunder50 + FPunder50)
-    #recall_under_50 = TPunder50 / (TPunder50 + FNunder50)
-    F1 = 2 * ((precission_over_50 *recall_over_50) /  (precission_over_50 + recall_over_50))
+    precision = TPover50 / (TPover50 + FPover50)
+    recall = TPover50 / (TPover50 + FNover50)
+    F1 = 2 * ((precision*recall) /  (precision + recall))
     accuracy = correct_prediction / len(test_data)
 
     file = open("HDP2BIG" + "workers" + str(num_work) + ".txt", "w+")
     print("Accuracy: ", str(accuracy))
-    print("Precision: ", str(precission_over_50))
-    print("Recall: ", str(recall_over_50))
+    print("Precision: ", str(precision))
+    print("Recall: ", str(recall))
     print("F1 score: ", str(F1))
     print("Execution time (s): ", time.time() - start_time)
     file.write("Number of workers: "+ str(num_work)+ "\n")
     file.write("Accuracy: "+ str(accuracy) + "\n")
     file.write("Execution time (s): " + str(time.time() - start_time) + "\n")
-    file.write("Precision: "+ str(precission_over_50)+ "\n")
-    file.write("Recall: "+ str(recall_over_50)+ "\n")
+    file.write("Precision: "+ str(precision)+ "\n")
+    file.write("Recall: "+ str(recall)+ "\n")
     file.write("F1 score: "+ str(F1)+ "\n")
     file.close()
     print(str(i))
